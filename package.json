@@ -1,0 +1,22 @@
+{
+  "name": "epda-ear",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@unpic/react": "^0.1.8",
+    "husky": "^9.0.11",
+    "prettier": "^3.2.5"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky",
+    "lint": "npx prettier --write \"**/*.java\" --ignore-unknown --no-error-on-unmatched-pattern"
+  },
+  "devDependencies": {
+    "prettier-plugin-java": "^2.5.0"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

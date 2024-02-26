@@ -1,0 +1,37 @@
+// ~/root/build.gradle
+plugins {
+    id 'java'
+    id 'ear'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_18
+}
+
+repositories {
+    mavenCentral()
+}
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    dependencies {
+        testImplementation 'junit:junit:4.13.2'
+    }
+}
+
+
+ear {
+  appDirectory = file('src/main/app') 
+      dependencies {
+          deploy project(':ejb')
+          deploy project(':war')
+      }
+}
+
