@@ -1,4 +1,4 @@
-package src.java.model;
+package com.epda.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private String id;
     private int password;
-    @OneToMany
+    // @OneToMany
 
     public User() {
     }

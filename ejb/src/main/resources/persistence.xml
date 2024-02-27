@@ -8,10 +8,10 @@
 
     <persistence-unit name="epda">
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/epda"/>
-            <property name="javax.persistence.jdbc.user" value="aaron"/>
-            <property name="javax.persistence.jdbc.password" value="aaron"/>
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/epda"/>
+            <property name="jakarta.persistence.jdbc.user" value="aaron"/>
+            <property name="jakarta.persistence.jdbc.password" value="aaron"/>
 
             <!-- Hibernate properties -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>

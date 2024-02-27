@@ -1,7 +1,12 @@
-
+// ~/war/build.gradle
 plugins {
     id 'war'
     id 'org.gretty' version '4.0.3'
+}
+
+// Inside war/build.gradle
+tasks.named('compileJava').configure {
+    dependsOn(':ejb:compileJava')
 }
 
 repositories {
@@ -10,15 +15,12 @@ repositories {
 }
 
 dependencies {
+    implementation project(':ejb')
     compileOnly 'org.apache.tomcat.embed:tomcat-embed-core:9.0.41'
     compileOnly 'org.apache.tomcat.embed:tomcat-embed-jasper:9.0.41'
     compileOnly 'jakarta.servlet:jakarta.servlet-api:4.0.4'
-    implementation project(':ejb')
-    
-    // Define other dependencies here
 }
 
-// Configure the war task to include the content of 'src/main/webapp' in the WAR
 war {
     webAppDirectory = file('src/main/webapp')
 }

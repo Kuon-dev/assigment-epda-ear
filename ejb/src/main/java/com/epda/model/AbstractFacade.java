@@ -1,4 +1,4 @@
-package model;
+package com.epda.model;
 
 import java.util.List;
 import jakarta.persistence.EntityManager;
