@@ -21,12 +21,12 @@ dependencies {
     compileOnly 'jakarta.servlet:jakarta.servlet-api:4.0.4'
 }
 
-war {
-    webAppDirectory = file('src/main/webapp')
-}
+// war {
+//     webAppDirectory = file('src/main/webapp')
+// }
 
 gretty {
-    httpPort = 8080
+    httpPort = 8000
     contextPath = '/'
 }
 

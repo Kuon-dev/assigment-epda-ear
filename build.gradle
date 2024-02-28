@@ -29,22 +29,6 @@ subprojects {
     }
 }
 
-// sourceSets {
-//     main {
-//         java {
-//             srcDir 'src'
-//         }
-//         resources {
-//             srcDir 'src'
-//         }
-//     }
-// }
-
-
-// dependencies {
-    // implementation project(':ejb')
-// }
-
 ear {
   // appDirectory = file('src/main/app') 
       dependencies {

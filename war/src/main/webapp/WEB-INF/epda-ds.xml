@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+    <datasource jndi-name="java:jboss/datasources/epda" pool-name="epda"
+        enabled="true" use-java-context="true">
+        <connection-url>jdbc:postgresql://localhost:5432/epda</connection-url>
+        <driver>postgresql-9.4.1208.jar</driver>
+        <security>
+            <user-name>aaron</user-name>
+            <password>aaron</password>
+        </security>
+    </datasource>
+</datasources>

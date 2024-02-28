@@ -17,7 +17,7 @@
 
           <div class="mt-5">
             <!-- Form -->
-            <form action="POST">
+            <form action="login" method="POST">
               <div class="grid gap-y-4">
                 <!-- Form Group -->
                 <div>
@@ -30,7 +30,6 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="email-error">Please include a valid email address so we can get back to you</p>
                 </div>
                 <!-- End Form Group -->
 
@@ -48,20 +47,13 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="password-error">8+ characters required</p>
+                  <p class="hidden text-xs text-red-600 mt-2" id="password-error">
+                    <% if (request.getAttribute("authError") != null) { %>
+                        <%= request.getAttribute("authError") %>
+                    <% } %>
+                  </p>
                 </div>
                 <!-- End Form Group -->
-
-                <!-- Checkbox -->
-                <div class="flex items-center">
-                  <div class="flex">
-                    <input id="remember-me" name="remember-me" type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 pointer-events-none focus:ring-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:checked:bg-blue-500 dark:checked:border-blue-500 dark:focus:ring-offset-gray-800">
-                  </div>
-                  <div class="ms-3">
-                    <label for="remember-me" class="text-sm dark:text-white">Remember me</label>
-                  </div>
-                </div>
-                <!-- End Checkbox -->
 
                 <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Sign in</button>
               </div>
