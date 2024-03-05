@@ -1,8 +1,0 @@
-<servlet>
-    <servlet-name>DbHealthCheckServlet</servlet-name>
-    <servlet-class>com.epda.config.DbHealthCheckServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-    <servlet-name>DbHealthCheckServlet</servlet-name>
-    <url-pattern>/health-check</url-pattern>
-</servlet-mapping>

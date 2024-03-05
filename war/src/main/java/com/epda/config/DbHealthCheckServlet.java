@@ -6,18 +6,20 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import java.io.IOException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.ejb.EJB;
+import com.epda.model.UserFacade;
 
 @WebServlet(name = "DbHealthCheckServlet", urlPatterns = { "/health-check" })
 public class DbHealthCheckServlet extends HttpServlet {
 
-    @PersistenceContext(unitName = "epda")
-    private EntityManager entityManager;
+    @EJB
+    private UserFacade userFacade;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String dbCheck = "Database Connection: Started";
       try {
-          entityManager.createNativeQuery("SELECT 1").getResultList();
+          userFacade.findAll();
           dbCheck = "Database Connection: Finished";
           request.setAttribute("dbStatus", "Database Connection: Successful");
       } catch (Exception e) {

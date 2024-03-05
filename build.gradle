@@ -1,44 +1,103 @@
-// ~/build.gradle
+// // ~/build.gradle
+// plugins {
+//     id 'java'
+//     id 'ear'
+// }
+//
+// java {
+//     sourceCompatibility = JavaVersion.VERSION_17
+// }
+//
+// repositories {
+//     mavenCentral()
+// }
+//
+// allprojects {
+//     repositories {
+//         mavenCentral()
+//     }
+// }
+//
+// subprojects {
+//     apply plugin: 'java'
+//
+//     dependencies {
+//         implementation 'io.github.classgraph:classgraph:4.8.165'
+//         testImplementation 'junit:junit:4.13.2'
+//     }
+// }
+//
+// ear {
+//     appDirName 'src/main/application' // Directory for application.xml
+//
+//     deploymentDescriptor {
+//         // Ensure application.xml is included in the EAR
+//         fileName = 'application.xml'
+//     }
+//
+//     dependencies {
+//         implementation 'io.github.classgraph:classgraph:4.8.165'
+//         testImplementation 'junit:junit:4.13.2'
+//
+//         deploy project(':ejb')
+//         deploy project(':war')
+//     }
+// }
+//
+//
+// sourceSets {
+//     main {
+//         java {
+//             srcDirs = ['src/main/java']
+//         }
+//         resources {
+//             srcDirs = ['src/main/resources']
+//         }
+//     }
+// }
+
+
+// Root project's build.gradle
 plugins {
+    // Apply plugins that are common for all subprojects, if any
     id 'java'
-    id 'ear'
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-}
-
-repositories {
-    mavenCentral()
-}
-
+// Common repositories for all subprojects
 allprojects {
     repositories {
         mavenCentral()
     }
 }
 
+// Common configurations for all subprojects
 subprojects {
     apply plugin: 'java'
 
+    // Java version compatibility
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+
+    // Common dependencies for all subprojects can be added here
     dependencies {
-        implementation 'io.github.classgraph:classgraph:4.8.165'
-        testImplementation 'junit:junit:4.13.2'
-        implementation 'jakarta.persistence:jakarta.persistence-api:3.0.0'
-        implementation 'jakarta.ejb:jakarta.ejb-api:4.0.0'
+        // For example, JUnit test framework for all projects
+        testImplementation 'junit:junit:4.12'
     }
+
+    // Other common configurations for all subprojects
 }
 
-ear {
-  // appDirectory = file('src/main/app') 
-      dependencies {
-        implementation 'io.github.classgraph:classgraph:4.8.165'
-        testImplementation 'junit:junit:4.13.2'
-        implementation 'jakarta.persistence:jakarta.persistence-api:3.0.0'
-        implementation 'jakarta.ejb:jakarta.ejb-api:4.0.0'
+// Include subprojects
 
-        deploy project(':ejb')
-        deploy project(':war')
-      }
+// Configuration for specific subprojects
+project(':ear') {
+    // EAR-specific configurations
+    apply plugin: 'ear'
+
+    // dependencies {
+    //     deploy project(':ejb')
+    //     deploy project(':war')
+    // }
+
+    // EAR plugin configuration goes here (as shown in the previous response)
 }
-

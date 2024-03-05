@@ -1,7 +1,7 @@
 package com.epda.model;
 
-import com.epda.model.AbstractFacade;
-import com.epda.model.User;
+// import com.epda.model.AbstractFacade;
+// import com.epda.model.User;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

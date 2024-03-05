@@ -1,2 +1,2 @@
 rootProject.name = 'epda-ear'
-include 'ejb', 'war'
+include 'ejb', 'war', 'ear'

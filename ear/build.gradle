@@ -1,0 +1,30 @@
+
+// ~/ear/build.gradle
+plugins {
+    id 'ear'
+}
+
+dependencies {
+    deploy project(':ejb')
+    deploy project(path: ':war', configuration: 'archives')
+}
+
+ear {
+    appDirName 'src/main/application'
+    libDirName 'lib'
+
+    deploymentDescriptor {
+        // Generate the application.xml file
+        version = '6'
+        initializeInOrder = true // If you require modules to be initialized in the order they are declared
+
+        module('ejb.jar', 'ejb') // Correct the module names as per your actual EJB jar file
+        webModule('war.war', '/') // Correct the module names as per your actual WAR file and desired context root
+    }
+}
+
+// Ensure that the EJB and WAR are built before the EAR
+// tasks.named('ear').configure {
+//     dependsOn(':ejb:build')
+//     dependsOn(':war:build')
+// }

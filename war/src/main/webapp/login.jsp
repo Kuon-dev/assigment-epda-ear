@@ -47,7 +47,7 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="password-error">
+                  <p class="text-xs text-red-600 mt-2" id="password-error">
                     <% if (request.getAttribute("authError") != null) { %>
                         <%= request.getAttribute("authError") %>
                     <% } %>
