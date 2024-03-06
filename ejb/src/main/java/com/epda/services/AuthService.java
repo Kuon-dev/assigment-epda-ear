@@ -1,4 +1,4 @@
-package com.epda.service;
+package com.epda.services;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
@@ -23,7 +23,7 @@ public class AuthService {
         return null;
     }
 
-    private boolean checkPassword(String rawPassword, String hashedPassword) {
-        return true;
+    private boolean checkPassword(String rawPassword, String storedPassword) {
+        return rawPassword.equals(storedPassword);
     }
 }
