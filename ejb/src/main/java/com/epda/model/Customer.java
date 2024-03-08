@@ -24,7 +24,7 @@ public class Customer implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // private static final long serialVersionUID = 1L;
     @Column(name = "id", nullable = false, unique = true, length = 10)
-    private long id;
+    private Long id;
 
     private String name;
     private String email;

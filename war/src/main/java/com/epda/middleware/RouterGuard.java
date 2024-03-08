@@ -41,7 +41,8 @@ public class RouterGuard implements Filter {
             ) ||
             requestURI.startsWith(
                 httpRequest.getContextPath() + "/veterinarian/"
-            )
+            ) ||
+            requestURI.startsWith(httpRequest.getContextPath() + "/dashboard/")
         ) {
             // If there's no "user" attribute in session, redirect to login page
             if (session == null || session.getAttribute("user") == null) {

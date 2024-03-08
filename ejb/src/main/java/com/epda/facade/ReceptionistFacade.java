@@ -19,4 +19,8 @@ public class ReceptionistFacade extends AbstractFacade<Receptionist> {
     public ReceptionistFacade() {
         super(Receptionist.class);
     }
+
+    public Receptionist findUserById(long id) {
+        return em.find(Receptionist.class, id);
+    }
 }

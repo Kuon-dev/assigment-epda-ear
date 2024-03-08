@@ -1,85 +1,193 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html class="h-full">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Welcome</title>
   </head>
   <body class="dark:bg-slate-900 bg-gray-100 flex h-full items-center py-16">
     <main class="w-full max-w-md mx-auto p-6">
-      <div class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      <div
+        class="mt-7 bg-white border border-gray-200 rounded-xl shadow-sm dark:bg-gray-800 dark:border-gray-700"
+      >
         <div class="p-4 sm:p-7">
           <div class="text-center">
-            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">Sign up</h1>
+            <h1 class="block text-2xl font-bold text-gray-800 dark:text-white">
+              Sign up
+            </h1>
             <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Already have an account?
-              <a class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="login">
+              <a
+                class="text-blue-600 decoration-2 hover:underline font-medium dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                href="/login"
+              >
                 Sign in here
               </a>
             </p>
           </div>
 
           <div class="mt-5">
-            <!-- Form -->
+            <%-- Form --%>
             <form action="#" method="post">
               <div class="grid gap-y-4">
-                <!-- Form Group -->
+                <%-- Form Group --%>
                 <div>
-                  <label for="email" class="block text-sm mb-2 dark:text-white">Email address</label>
+                  <label for="email" class="block text-sm mb-2 dark:text-white"
+                    >Email address</label
+                  >
                   <div class="relative">
-                    <input type="email" id="email" name="email" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="email-error">
-                    <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                      <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                      required
+                      aria-describedby="email-error"
+                    />
+                    <div
+                      class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3"
+                    >
+                      <svg
+                        class="size-5 text-red-500"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+                        />
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="email-error">Please include a valid email address so we can get back to you</p>
+                  <p class="hidden text-xs text-red-600 mt-2" id="email-error">
+                    Please include a valid email address so we can get back to
+                    you
+                  </p>
                 </div>
-                <!-- End Form Group -->
+                <%-- End Form Group --%>
                 <div>
-                  <label for="name" class="block text-sm mb-2 dark:text-white">Name</label>
-                  <input type="text" id="name" name="name" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required>
+                  <label for="name" class="block text-sm mb-2 dark:text-white"
+                    >Name</label
+                  >
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                    required
+                  />
                 </div>
                 <div>
-                  <label for="name" class="block text-sm mb-2 dark:text-white">Phone</label>
-                  <input type="text" id="phone" name="phone" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required>
+                  <label for="name" class="block text-sm mb-2 dark:text-white"
+                    >Phone</label
+                  >
+                  <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                    required
+                  />
                 </div>
-                <!-- Form Group -->
+                <%-- Form Group --%>
                 <div>
-                  <label for="password" class="block text-sm mb-2 dark:text-white">Password</label>
+                  <label
+                    for="password"
+                    class="block text-sm mb-2 dark:text-white"
+                    >Password</label
+                  >
                   <div class="relative">
-                    <input type="password" id="password" name="password" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="password-error">
-                    <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                      <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                    <input
+                      type="password"
+                      id="password"
+                      name="password"
+                      class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                      required
+                      aria-describedby="password-error"
+                    />
+                    <div
+                      class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3"
+                    >
+                      <svg
+                        class="size-5 text-red-500"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+                        />
                       </svg>
                     </div>
                   </div>
-                  <p class="hidden text-xs text-red-600 mt-2" id="password-error">8+ characters required</p>
+                  <p
+                    class="hidden text-xs text-red-600 mt-2"
+                    id="password-error"
+                  >
+                    8+ characters required
+                  </p>
                 </div>
-                <!-- End Form Group -->
+                <%-- End Form Group --%>
 
-                <!-- Form Group -->
+                <%-- Form Group --%>
                 <div>
-                  <label for="confirm-password" class="block text-sm mb-2 dark:text-white">Confirm Password</label>
+                  <label
+                    for="confirm-password"
+                    class="block text-sm mb-2 dark:text-white"
+                    >Confirm Password</label
+                  >
                   <div class="relative">
-                    <input type="password" id="confirm-password" name="confirm-password" class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600" required aria-describedby="confirm-password-error">
-                    <div class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3">
-                      <svg class="size-5 text-red-500" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                    <input
+                      type="password"
+                      id="confirm-password"
+                      name="confirm-password"
+                      class="py-3 px-4 block w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+                      required
+                      aria-describedby="confirm-password-error"
+                    />
+                    <div
+                      class="hidden absolute inset-y-0 end-0 pointer-events-none pe-3"
+                    >
+                      <svg
+                        class="size-5 text-red-500"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                        aria-hidden="true"
+                      >
+                        <path
+                          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+                        />
                       </svg>
                     </div>
                   </div>
                 </div>
-                <!-- End Form Group -->
+                <%-- End Form Group --%>
 
-                <button type="submit" class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">Sign up</button>
+                <button
+                  type="submit"
+                  class="w-full py-3 px-4 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
+                >
+                  Sign up
+                </button>
               </div>
-              <jsp:include page="/registerError.jsp" />
+              <c:if test="${not empty errorMsgs}">
+                <div class="text-xs text-red-600">
+                  <ul>
+                    <c:forEach items="${errorMsgs}" var="msg">
+                      <li><c:out value="${msg}" /></li>
+                    </c:forEach>
+                  </ul>
+                </div>
+              </c:if>
             </form>
-            <!-- End Form -->
+            <%-- End Form --%>
           </div>
         </div>
       </div>

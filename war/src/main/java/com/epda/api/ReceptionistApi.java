@@ -103,4 +103,68 @@ public class ReceptionistApi extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(result);
     }
+
+    @Override
+    protected void doPut(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo != null && pathInfo.split("/").length == 2) {
+            String[] splits = pathInfo.split("/");
+            try {
+                Long id = Long.parseLong(splits[1]);
+                Receptionist existingReceptionist = receptionistFacade.find(id);
+                if (existingReceptionist != null) {
+                    Jsonb jsonb = JsonbBuilder.create();
+                    Receptionist updatedReceptionist = jsonb.fromJson(
+                        request.getReader(),
+                        Receptionist.class
+                    );
+
+                    // Ensure that the ID in the URL matches the ID in the body or is not set in the body
+                    if (
+                        updatedReceptionist.getId() == null ||
+                        updatedReceptionist
+                            .getId()
+                            .equals(existingReceptionist.getId())
+                    ) {
+                        // Copy properties from updatedReceptionist to existingReceptionist (excluding ID if necessary)
+                        updateExistingReceptionist(
+                            existingReceptionist,
+                            updatedReceptionist
+                        );
+
+                        receptionistFacade.edit(existingReceptionist); // Implement the update logic in the facade
+                        writeResponse(response, existingReceptionist);
+                    } else {
+                        response.sendError(
+                            HttpServletResponse.SC_BAD_REQUEST,
+                            "ID in URL does not match ID in body"
+                        );
+                    }
+                } else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    // Existing writeResponse method...
+
+    private void updateExistingReceptionist(
+        Receptionist existing,
+        Receptionist updated
+    ) {
+        // Copy properties from updated to existing. For example:
+        existing.setName(updated.getName());
+        existing.setPassword(updated.getPassword());
+        existing.setEmail(updated.getEmail());
+        existing.setPhone(updated.getPhone());
+        // Add more fields as necessary
+    }
 }

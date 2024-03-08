@@ -31,9 +31,20 @@ public class RegisterController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws IOException, ServletException {
-        request
-            .getRequestDispatcher("/register.jsp")
-            .forward(request, response);
+        String pathInfo = request.getPathInfo();
+        String path = (pathInfo != null && pathInfo.length() > 1)
+            ? pathInfo.substring(1).toLowerCase()
+            : "";
+        // Check for the specific roles and forward to the correct page
+        if ("receptionist".equals(path) || "veterinarian".equals(path)) {
+            request
+                .getRequestDispatcher("/register.jsp")
+                .forward(request, response);
+        } else {
+            request
+                .getRequestDispatcher("/register-role.jsp")
+                .forward(request, response);
+        }
     }
 
     @Override
@@ -52,6 +63,20 @@ public class RegisterController extends HttpServlet {
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
+
+        // Validate input
+        // if (name == null || name.isBlank()) errorMsgs.add("Name is required.");
+        // if (email == null || email.isBlank()) errorMsgs.add("Email is required.");
+        // if (password == null || password.isBlank()) errorMsgs.add("Password is required.");
+        // if (!password.equals(confirmPassword)) errorMsgs.add("Passwords do not match.");
+
+        if (!errorMsgs.isEmpty()) {
+            request.setAttribute("errorMsgs", errorMsgs);
+            request
+                .getRequestDispatcher("/registrationErrors.jsp")
+                .forward(request, response);
+            return;
+        }
 
         switch (role) {
             case "receptionist":
