@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 // import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -55,4 +56,7 @@ public class Appointment implements Serializable {
 
     @Column(name = "prognosis")
     private String prognosis;
+
+    @Column(name = "appointment_date")
+    private LocalDateTime appointmentDate;
 }

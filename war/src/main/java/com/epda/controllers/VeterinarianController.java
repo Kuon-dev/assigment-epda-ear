@@ -1,8 +1,8 @@
 package com.epda.controllers;
 
-import com.epda.facade.ReceptionistFacade;
-import com.epda.model.Receptionist;
+import com.epda.facade.VeterinarianFacade;
 import com.epda.model.User;
+import com.epda.model.Veterinarian;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -13,11 +13,11 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/receptionist/edit-profile")
-public class ReceptionistController extends HttpServlet {
+@WebServlet("/veterinarian/edit-profile")
+public class VeterinarianController extends HttpServlet {
 
     @EJB
-    private ReceptionistFacade receptionistFacade;
+    private VeterinarianFacade veterinarianFacade;
 
     protected void doGet(
         HttpServletRequest request,
@@ -26,13 +26,13 @@ public class ReceptionistController extends HttpServlet {
         HttpSession session = request.getSession(false);
         // Assuming the user ID is available in the session or passed as a parameter
         User user = (User) session.getAttribute("user");
-        List<Receptionist> users = receptionistFacade.findAll();
+        List<Veterinarian> users = veterinarianFacade.findAll();
         if (user == null) {
             response.sendRedirect("/login");
             return;
         }
 
-        for (Receptionist u : users) {
+        for (Veterinarian u : users) {
             if (u.getId() == user.getId()) {
                 user = u;
                 break;
@@ -40,7 +40,7 @@ public class ReceptionistController extends HttpServlet {
         }
         request.setAttribute("user", user);
         request
-            .getRequestDispatcher("/receptionist-dashboard.jsp")
+            .getRequestDispatcher("/veterinarian-dashboard.jsp")
             .forward(request, response);
     }
 }

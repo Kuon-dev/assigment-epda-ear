@@ -17,7 +17,7 @@ public class AppStartupListener implements ServletContextListener {
         int numberOfCustomers = 10;
         int petsPerCustomer = 3;
 
-        databaseSeeder.seedDatabase(numberOfCustomers, petsPerCustomer);
+        databaseSeeder.seedDatabase(numberOfCustomers, petsPerCustomer, 50);
     }
 
     @Override

@@ -1,6 +1,10 @@
 package com.epda.facade;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 
 public abstract class AbstractFacade<T> {
@@ -30,30 +34,29 @@ public abstract class AbstractFacade<T> {
     }
 
     public List<T> findAll() {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        cq.select(cq.from(entityClass));
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> root = cq.from(entityClass);
+        cq.select(root);
         return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<T> findRange(int[] range) {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        cq.select(cq.from(entityClass));
-        jakarta.persistence.Query q = getEntityManager().createQuery(cq);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> root = cq.from(entityClass);
+        cq.select(root);
+        TypedQuery<T> q = getEntityManager().createQuery(cq); // Use TypedQuery here
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
-        return q.getResultList();
+        return q.getResultList(); // This is now type-safe
     }
 
     public int count() {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        jakarta.persistence.criteria.Root<T> rt = cq.from(entityClass);
-        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<T> root = cq.from(entityClass);
+        cq.select(cb.count(root));
         jakarta.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
