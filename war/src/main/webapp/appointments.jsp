@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,19 +35,48 @@
         </tbody>
     </table>
 
-    <div class="flex justify-center">
-        <nav aria-label="Page navigation">
-            <ul class="inline-flex -space-x-px">
-                <c:forEach begin="1" end="${totalPages}" var="i">
-                    <li>
-                        <a class="${currentPage == i ? 'text-white bg-blue-600' : 'text-blue-600 bg-white'} border px-3 py-1" href="appointments?page=${i}">
-                            ${i}
-                        </a>
-                    </li>
-                </c:forEach>
-            </ul>
-        </nav>
+<div class="flex items-center justify-center gap-4 mt-5">
+    <!-- Previous Button -->
+    <c:choose>
+        <c:when test="${currentPage > 1}">
+            <a href="appointments?page=${currentPage - 1}" class="flex items-center gap-2 px-6 py-3 ...">
+                <!-- SVG for Previous -->
+                Previous
+            </a>
+        </c:when>
+        <c:otherwise>
+            <button disabled class="flex items-center gap-2 px-6 py-3 ..." type="button">
+                <!-- SVG for Previous -->
+                Previous
+            </button>
+        </c:otherwise>
+    </c:choose>
+
+    <!-- Page Number Buttons -->
+    <div class="flex items-center gap-2">
+        <c:forEach begin="${startPage}" end="${endPage}" var="i">
+            <a href="appointments?page=${i}" class="relative h-10 w-10 ... ${currentPage == i ? 'bg-gray-900 text-white' : 'text-gray-900'}">
+                <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">${i}</span>
+            </a>
+        </c:forEach>
     </div>
+
+    <!-- Next Button -->
+    <c:choose>
+        <c:when test="${currentPage < totalPages}">
+            <a href="appointments?page=${currentPage + 1}" class="flex items-center gap-2 px-6 py-3 ...">
+                <!-- SVG for Next -->
+                Next
+            </a>
+        </c:when>
+        <c:otherwise>
+            <button disabled class="flex items-center gap-2 px-6 py-3 ..." type="button">
+                <!-- SVG for Next -->
+                Next
+            </button>
+        </c:otherwise>
+    </c:choose>
+</div>
 </div>
 
 </body>

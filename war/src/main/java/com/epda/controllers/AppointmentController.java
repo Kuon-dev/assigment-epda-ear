@@ -23,27 +23,37 @@ public class AppointmentController extends HttpServlet {
         HttpServletResponse response
     ) throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        int page = 1;
+        int currentPage;
         if (pageParam != null && !pageParam.isEmpty()) {
             try {
-                page = Integer.parseInt(pageParam);
+                currentPage = Integer.parseInt(pageParam);
             } catch (NumberFormatException e) {
-                page = 1;
+                currentPage = 1; // Default to page 1 if parsing fails
             }
+        } else {
+            currentPage = 1; // Default to page 1 if no page parameter is provided
         }
 
         List<Appointment> appointments = appointmentFacade.findAppointments(
-            page
+            currentPage
         );
         int totalAppointments = appointmentFacade.count();
-        int totalPages = (int) Math.ceil(
-            (double) totalAppointments / AppointmentFacade.PAGE_SIZE
-        );
+        int maxPagesToShow = 5;
+        int totalPages = (int) Math.ceil((double) totalAppointments / 10);
+        int halfPagesToShow = maxPagesToShow / 2;
 
-        request.setAttribute("appointments", appointments);
-        request.setAttribute("currentPage", page);
+        int startPage = Math.max(currentPage - halfPagesToShow, 1);
+        int endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+
+        if (endPage - startPage < maxPagesToShow - 1) {
+            startPage = Math.max(endPage - (maxPagesToShow - 1), 1);
+        }
+
+        request.setAttribute("startPage", startPage);
+        request.setAttribute("endPage", endPage);
         request.setAttribute("totalPages", totalPages);
-
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("appointments", appointments);
         request
             .getRequestDispatcher("/appointments.jsp")
             .forward(request, response);
