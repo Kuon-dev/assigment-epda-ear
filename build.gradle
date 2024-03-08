@@ -1,62 +1,3 @@
-// // ~/build.gradle
-// plugins {
-//     id 'java'
-//     id 'ear'
-// }
-//
-// java {
-//     sourceCompatibility = JavaVersion.VERSION_17
-// }
-//
-// repositories {
-//     mavenCentral()
-// }
-//
-// allprojects {
-//     repositories {
-//         mavenCentral()
-//     }
-// }
-//
-// subprojects {
-//     apply plugin: 'java'
-//
-//     dependencies {
-//         implementation 'io.github.classgraph:classgraph:4.8.165'
-//         testImplementation 'junit:junit:4.13.2'
-//     }
-// }
-//
-// ear {
-//     appDirName 'src/main/application' // Directory for application.xml
-//
-//     deploymentDescriptor {
-//         // Ensure application.xml is included in the EAR
-//         fileName = 'application.xml'
-//     }
-//
-//     dependencies {
-//         implementation 'io.github.classgraph:classgraph:4.8.165'
-//         testImplementation 'junit:junit:4.13.2'
-//
-//         deploy project(':ejb')
-//         deploy project(':war')
-//     }
-// }
-//
-//
-// sourceSets {
-//     main {
-//         java {
-//             srcDirs = ['src/main/java']
-//         }
-//         resources {
-//             srcDirs = ['src/main/resources']
-//         }
-//     }
-// }
-
-
 // Root project's build.gradle
 plugins {
     // Apply plugins that are common for all subprojects, if any
@@ -93,11 +34,4 @@ subprojects {
 project(':ear') {
     // EAR-specific configurations
     apply plugin: 'ear'
-
-    // dependencies {
-    //     deploy project(':ejb')
-    //     deploy project(':war')
-    // }
-
-    // EAR plugin configuration goes here (as shown in the previous response)
 }
