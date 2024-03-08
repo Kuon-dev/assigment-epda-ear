@@ -18,10 +18,19 @@ dependencies {
     // PostgreSQL Driver
     runtimeOnly 'org.postgresql:postgresql:42.3.1'
     
-    // Add any additional dependencies your project might need
+    implementation 'net.datafaker:datafaker:2.1.0'
 }
 
+
+// task copyRuntimeLibs(type: Copy) {
+//     into "$buildDir/libs"
+//     from configurations.runtimeClasspath
+// }
+//
 // jar {
-//     // Ensure the EJB classes are included in the jar
+//     dependsOn copyRuntimeLibs
 //     from sourceSets.main.output
 // }
+//
+// // jar {
+// // }

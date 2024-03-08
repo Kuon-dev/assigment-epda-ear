@@ -33,7 +33,6 @@ public class CustomerController extends HttpServlet {
             Customer customer = new Customer();
             customer.setName(name);
             customer.setEmail(email);
-            customer.setPassword(password);
 
             customerFacade.create(customer);
             // Redirect to a confirmation page or back to the form with a success message

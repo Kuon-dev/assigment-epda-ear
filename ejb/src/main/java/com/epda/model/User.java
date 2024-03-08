@@ -1,36 +1,36 @@
 package com.epda.model;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.DiscriminatorColumn;
-import jakarta.persistence.DiscriminatorType;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Column;
 
-@Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.STRING)
+@MappedSuperclass
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public String id;
+    @Column(name = "id", nullable = false, unique = true, length = 10)
+    private long id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "phone")
     private String phone;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "passsword")
     private String password;
-    private String role;
 
-    // @OneToMany
+    @Column(name = "created_at")
+    private String created_at;
 
-    public User() {}
-
-    public User(String id, String password) {
-        this.id = id;
-        this.password = password;
-    }
+    @Column(name = "updated_at")
+    private String updated_at;
 
     public String getEmail() {
         return email;
@@ -48,11 +48,11 @@ public class User {
         this.password = password;
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -72,11 +72,19 @@ public class User {
         this.phone = phone;
     }
 
-    public String getRole() {
-        return role;
+    public String getCreated_at() {
+        return created_at;
+    }
+    
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public String getUpdated_at() {
+        return updated_at;
+    }
+
+    public void setUpdated_at(String updated_at) {
+        this.updated_at = updated_at;
     }
 }

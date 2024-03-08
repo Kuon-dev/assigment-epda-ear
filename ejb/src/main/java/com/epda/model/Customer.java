@@ -8,6 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import java.util.Collection;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import jakarta.persistence.CascadeType;
 
 // import com.epda.model.User;
 
@@ -23,9 +27,16 @@ public class Customer implements Serializable {
     private long id;
     private String name;
     private String email;
-    private String password;
+    // owns many pets
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true) // Recommended to specify cascade and orphanRemoval
+    private Collection<Pet> pets = new ArrayList<>();
 
     public Customer() {}
+
+    public Customer(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 
     public String getName() {
         return name;
@@ -42,13 +53,4 @@ public class Customer implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
 }
