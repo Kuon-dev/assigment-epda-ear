@@ -14,12 +14,12 @@ public class UserFactory {
         user.setPhone(faker.phoneNumber().phoneNumber());
         user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.internet().password());
-        user.setCreated_at(
-            LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        );
-        user.setUpdated_at(
-            LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        );
+        // user.setCreatedAt(
+        //     LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        // );
+        // user.setUpdatedAt(
+        //     LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+        // );
     }
 
     // If direct instantiation of User is allowed and makes sense in your model

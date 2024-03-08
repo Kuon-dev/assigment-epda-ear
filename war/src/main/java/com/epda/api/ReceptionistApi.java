@@ -1,7 +1,7 @@
 package com.epda.api;
 
-import com.epda.facade.ManagingStaffFacade;
-import com.epda.model.ManagingStaff;
+import com.epda.facade.ReceptionistFacade;
+import com.epda.model.Receptionist;
 import jakarta.ejb.EJB;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
@@ -12,11 +12,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/api/managing-staff/*")
-public class ManagingStaffApi extends HttpServlet {
+@WebServlet("/api/receptionist/*")
+public class ReceptionistApi extends HttpServlet {
 
     @EJB
-    private ManagingStaffFacade managingStaffFacade;
+    private ReceptionistFacade receptionistFacade;
 
     @Override
     protected void doGet(
@@ -26,18 +26,18 @@ public class ManagingStaffApi extends HttpServlet {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
-            // Fetch all managingStaffs
-            List<ManagingStaff> managingStaffs = managingStaffFacade.findAll();
-            writeResponse(response, managingStaffs);
+            // Fetch all receptionists
+            List<Receptionist> receptionists = receptionistFacade.findAll();
+            writeResponse(response, receptionists);
         } else {
-            // Fetch a single managingStaff
+            // Fetch a single receptionist
             String[] splits = pathInfo.split("/");
             if (splits.length == 2) {
                 try {
                     Long id = Long.parseLong(splits[1]);
-                    ManagingStaff managingStaff = managingStaffFacade.find(id);
-                    if (managingStaff != null) {
-                        writeResponse(response, managingStaff);
+                    Receptionist receptionist = receptionistFacade.find(id);
+                    if (receptionist != null) {
+                        writeResponse(response, receptionist);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     }
@@ -54,15 +54,15 @@ public class ManagingStaffApi extends HttpServlet {
         HttpServletResponse response
     ) throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
-        ManagingStaff managingStaff = jsonb.fromJson(
+        Receptionist receptionist = jsonb.fromJson(
             request.getReader(),
-            ManagingStaff.class
+            Receptionist.class
         );
 
-        if (managingStaff != null) {
-            managingStaffFacade.create(managingStaff);
+        if (receptionist != null) {
+            receptionistFacade.create(receptionist);
             response.setStatus(HttpServletResponse.SC_CREATED);
-            writeResponse(response, managingStaff);
+            writeResponse(response, receptionist);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -79,9 +79,9 @@ public class ManagingStaffApi extends HttpServlet {
             if (splits.length == 2) {
                 try {
                     Long id = Long.parseLong(splits[1]);
-                    ManagingStaff managingStaff = managingStaffFacade.find(id);
-                    if (managingStaff != null) {
-                        managingStaffFacade.remove(managingStaff);
+                    Receptionist receptionist = receptionistFacade.find(id);
+                    if (receptionist != null) {
+                        receptionistFacade.remove(receptionist);
                         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
