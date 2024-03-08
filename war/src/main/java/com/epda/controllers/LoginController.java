@@ -21,14 +21,23 @@ public class LoginController extends HttpServlet {
     private AuthService authService;
 
     @Override
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
+        // This could be used to show the login form
+        request.getRequestDispatcher("/login.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        User user = authService.login(username, password);
+        User user = authService.login(email, password);
 
         if (user != null) {
             // Authentication successful, create a session
@@ -38,7 +47,6 @@ public class LoginController extends HttpServlet {
             // Redirect or forward to a success page or the user's dashboard
             response.sendRedirect("dashboard.jsp"); // Adjust as needed
         } else {
-            // Authentication failed, redirect back to the login form with an error message
             response.sendRedirect("login.jsp?error=true"); // Adjust as needed
         }
     }
