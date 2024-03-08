@@ -1,14 +1,20 @@
 package com.epda.factory;
 
-import net.datafaker.Faker;
 import com.epda.model.Pet;
 import java.util.List;
 import java.util.Random;
+import net.datafaker.Faker;
 
 public class PetFactory {
 
     private static final Faker faker = new Faker();
-    private static final List<String> petTypes = List.of("Dog", "Cat", "Bird", "Rabbit", "Fish");
+    private static final List<String> petTypes = List.of(
+        "Dog",
+        "Cat",
+        "Bird",
+        "Rabbit",
+        "Fish"
+    );
     private static final Random random = new Random();
 
     public static Pet create() {

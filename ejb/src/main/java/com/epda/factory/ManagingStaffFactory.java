@@ -3,6 +3,7 @@ package com.epda.factory;
 import com.epda.model.ManagingStaff;
 
 public class ManagingStaffFactory {
+
     public static ManagingStaff createManagingStaff() {
         ManagingStaff staff = new ManagingStaff();
         UserFactory.populateUserFields(staff);

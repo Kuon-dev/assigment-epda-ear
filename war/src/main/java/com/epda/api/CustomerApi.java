@@ -19,7 +19,10 @@ public class CustomerApi extends HttpServlet {
     private CustomerFacade customerFacade;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
@@ -46,7 +49,10 @@ public class CustomerApi extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
         Customer customer = jsonb.fromJson(request.getReader(), Customer.class);
 
@@ -60,7 +66,10 @@ public class CustomerApi extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doDelete(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo != null) {
             String[] splits = pathInfo.split("/");
@@ -83,7 +92,8 @@ public class CustomerApi extends HttpServlet {
         }
     }
 
-    private void writeResponse(HttpServletResponse response, Object object) throws IOException {
+    private void writeResponse(HttpServletResponse response, Object object)
+        throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
         String result = jsonb.toJson(object);
         response.setContentType("application/json");
@@ -91,4 +101,3 @@ public class CustomerApi extends HttpServlet {
         response.getWriter().write(result);
     }
 }
-

@@ -1,5 +1,7 @@
 package com.epda.controllers;
 
+import com.epda.facade.CustomerFacade;
+import com.epda.model.Customer;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,8 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import com.epda.model.Customer;
-import com.epda.facade.CustomerFacade;
 
 @WebServlet("/create-customer")
 public class CustomerController extends HttpServlet {
@@ -17,14 +17,20 @@ public class CustomerController extends HttpServlet {
     @EJB
     private CustomerFacade customerFacade;
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         // This could be used to show the form to create a new customer
-        request.getRequestDispatcher("/create-customer-form.jsp").forward(request, response);
+        request
+            .getRequestDispatcher("/create-customer-form.jsp")
+            .forward(request, response);
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
         try {
             String name = request.getParameter("name");
             String email = request.getParameter("email");

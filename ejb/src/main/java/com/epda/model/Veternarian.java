@@ -1,11 +1,12 @@
 package com.epda.model;
 
-import jakarta.persistence.Entity;
-import java.io.Serializable;
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.Serializable;
+
 // import com.epda.model.User;
 
 // import com.epda.model.User;
@@ -17,6 +18,7 @@ public class Veternarian implements Serializable {
     @Id
     @Column(name = "id")
     private String name;
+
     private String email;
     private String password;
 
@@ -45,6 +47,4 @@ public class Veternarian implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 }
-

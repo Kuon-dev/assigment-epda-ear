@@ -1,17 +1,17 @@
 package com.epda.model;
 
-import jakarta.persistence.Entity;
-import java.io.Serializable;
-// import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import java.util.Collection;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+// import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
-import jakarta.persistence.CascadeType;
+import java.util.Collection;
 
 // import com.epda.model.User;
 
@@ -25,10 +25,16 @@ public class Customer implements Serializable {
     // private static final long serialVersionUID = 1L;
     @Column(name = "id", nullable = false, unique = true, length = 10)
     private long id;
+
     private String name;
     private String email;
+
     // owns many pets
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true) // Recommended to specify cascade and orphanRemoval
+    @OneToMany(
+        mappedBy = "customer",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    ) // Recommended to specify cascade and orphanRemoval
     private Collection<Pet> pets = new ArrayList<>();
 
     public Customer() {}

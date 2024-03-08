@@ -19,7 +19,10 @@ public class ManagingStaffApi extends HttpServlet {
     private ManagingStaffFacade customerFacade;
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doGet(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         String pathInfo = request.getPathInfo();
 
         if (pathInfo == null || pathInfo.equals("/")) {
@@ -46,9 +49,15 @@ public class ManagingStaffApi extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
-        ManagingStaff customer = jsonb.fromJson(request.getReader(), ManagingStaff.class);
+        ManagingStaff customer = jsonb.fromJson(
+            request.getReader(),
+            ManagingStaff.class
+        );
 
         if (customer != null) {
             customerFacade.create(customer);
@@ -60,7 +69,10 @@ public class ManagingStaffApi extends HttpServlet {
     }
 
     @Override
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doDelete(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
         String pathInfo = request.getPathInfo();
         if (pathInfo != null) {
             String[] splits = pathInfo.split("/");
@@ -83,7 +95,8 @@ public class ManagingStaffApi extends HttpServlet {
         }
     }
 
-    private void writeResponse(HttpServletResponse response, Object object) throws IOException {
+    private void writeResponse(HttpServletResponse response, Object object)
+        throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
         String result = jsonb.toJson(object);
         response.setContentType("application/json");
@@ -91,4 +104,3 @@ public class ManagingStaffApi extends HttpServlet {
         response.getWriter().write(result);
     }
 }
-

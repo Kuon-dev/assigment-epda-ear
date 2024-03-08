@@ -1,10 +1,10 @@
 package com.epda.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Column;
 
 @MappedSuperclass
 public class User {
@@ -75,7 +75,7 @@ public class User {
     public String getCreated_at() {
         return created_at;
     }
-    
+
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
