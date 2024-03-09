@@ -46,9 +46,10 @@ public class AppointmentEditController extends HttpServlet {
                     if (appointment != null) {
                         request.setAttribute("appointment", appointment);
                         Long petId = appointment.getPet().getId();
-                        Pet pet = petFacade.findPetById(petId);
+                        Pet pet = petFacade.find(petId);
                         Customer customer = pet.getCustomer();
-                        Veterinarian veterinarian = appointment.getVet();
+                        Veterinarian veterinarian =
+                            appointment.getVeterinarian();
                         request.setAttribute("customer", customer);
                         request.setAttribute("pet", pet);
                         request
