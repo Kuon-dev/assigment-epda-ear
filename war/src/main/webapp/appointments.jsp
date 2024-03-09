@@ -11,8 +11,8 @@
 <body>
 
 <div class="container mx-auto mt-5">
-    <form action="appointments" method="get" class="mb-4">
-        <input type="text" name="" placeholder="Search by customer name" class="border-2 border-gray-200 rounded-lg p-2 mr-2" value="${fn:escapeXml(param.search)}"/>
+    <form action="${pageContext.request.contextPath}/appointments" method="get" class="mb-4">
+        <input type="text" name="search" placeholder="Search by customer name" class="border-2 border-gray-200 rounded-lg p-2 mr-2" value="${fn:escapeXml(param.search)}"/>
         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Search
         </button>
@@ -43,7 +43,7 @@
             </c:forEach>
         </tbody>
     </table>
-
+<c:if test="${empty param.search}">
 <div class="flex items-center justify-center gap-4 mt-5">
     <!-- Previous Button -->
     <c:choose>
@@ -64,7 +64,7 @@
     <!-- Page Number Buttons -->
     <div class="flex items-center gap-2">
         <c:forEach begin="${startPage}" end="${endPage}" var="i">
-            <a href="appointments?page=${i}${not empty param.search ? '&search=' + fn:escapeXml(param.search) : ''}" class="relative h-10 w-10 ... ${currentPage == i ? 'bg-gray-900 text-white' : 'text-gray-900'}">
+            <a href="${pageContext.request.contextPath}/appointments/${i}${not empty param.search ? '?search=' + fn:escapeXml(param.search) : ''}" class="relative h-10 w-10 ... ${currentPage == i ? 'bg-gray-900 text-white' : 'text-gray-900'}">
                 <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">${i}</span>
             </a>
         </c:forEach>
@@ -87,6 +87,7 @@
     </c:choose>
 </div>
 </div>
+</c:if>
 
 </body>
 </html>

@@ -13,7 +13,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-@WebServlet("/appointments")
+@WebServlet("/appointments/*")
 public class AppointmentController extends HttpServlet {
 
     @EJB
@@ -24,21 +24,23 @@ public class AppointmentController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
-        String pageParam = request.getParameter("page");
-        System.out.println(pageParam);
+        String pathInfo = request.getPathInfo();
         int currentPage = 1;
+
+        // Parsing currentPage from pathInfo
+        if (pathInfo != null && !pathInfo.isEmpty()) {
+            String[] splits = pathInfo.split("/");
+            if (splits.length > 1) {
+                try {
+                    currentPage = Integer.parseInt(splits[1]);
+                } catch (NumberFormatException e) {
+                    // Handle incorrect format gracefully, perhaps redirect to a default page or log
+                    currentPage = 1;
+                }
+            }
+        }
         String searchQuery = request.getParameter("search");
         String encodedSearchQuery = "";
-
-        if (pageParam != null && !pageParam.isEmpty()) {
-            try {
-                currentPage = Integer.parseInt(pageParam);
-            } catch (NumberFormatException e) {
-                currentPage = 1; // Default to page 1 if parsing fails
-            }
-        } else {
-            currentPage = 1; // Default to page 1 if no page parameter is provided
-        }
 
         int totalAppointments;
         List<Appointment> appointments;
@@ -68,13 +70,16 @@ public class AppointmentController extends HttpServlet {
 
         System.out.println(currentPage);
         // if there is a search query, don't paginate
-        // appointments = searchQuery != null && !searchQuery.isEmpty()
-        //   ? appointments :
-        //     appointments.subList((currentPage - 1) * 10, Math.min(currentPage * 10, appointments.size()));
-        appointments = appointments.subList(
-            (currentPage - 1) * 10,
-            Math.min(currentPage * 10, appointments.size())
-        );
+        appointments = searchQuery != null && !searchQuery.isEmpty()
+            ? appointments
+            : appointments.subList(
+                (currentPage - 1) * 10,
+                Math.min(currentPage * 10, appointments.size())
+            );
+        // appointments = appointments.subList(
+        //     (currentPage - 1) * 10,
+        //     Math.min(currentPage * 10, appointments.size())
+        // );
 
         request.setAttribute("encodedSearchQuery", encodedSearchQuery);
 
