@@ -23,6 +23,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @WebServlet("/api/appointment/*")
@@ -210,6 +213,13 @@ public class AppointmentApi extends HttpServlet {
             );
             return;
         }
+
+        LocalDate date = LocalDate.parse(appointmentDTO.getAppointmentDate());
+        LocalDateTime appointmentDateTime = LocalDateTime.of(
+            date,
+            LocalTime.MIDNIGHT
+        );
+        existingAppointment.setAppointmentDate(appointmentDateTime);
 
         // Check if the updated appointment's customer ID matches the pet's customer ID
         // if (!customer.getId().equals(updatedAppointment.getPet().getCustomer().getId())) {

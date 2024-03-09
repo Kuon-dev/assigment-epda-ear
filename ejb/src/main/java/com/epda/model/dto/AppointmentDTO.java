@@ -2,6 +2,11 @@ package com.epda.model.dto;
 
 import com.epda.model.Appointment;
 
+// DTO - Data Transfer Object, fixes this issue
+// jakarta.json.bind.JsonbException: Unable to serialize property 'pet' from com.epda.model.Appointment
+//
+// Instead of serializing the entity directly, map the relevant data to a DTO that doesn't include the lazy-loaded collections.
+// DTOs are plain Java objects that you can use to shape the data that you need to serialize
 public class AppointmentDTO {
 
     private Long id;
@@ -13,7 +18,7 @@ public class AppointmentDTO {
     private String status;
     private String diagnosis;
     private String prognosis;
-    private String appointmentDate; // Use a String to simplify serialization issues with dates.
+    private String appointmentDate;
 
     public AppointmentDTO() {}
 
