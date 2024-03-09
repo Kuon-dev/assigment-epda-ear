@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @WebServlet("/appointments/view/*")
-public class AppointmentController extends HttpServlet {
+public class AppointmentViewController extends HttpServlet {
 
     @EJB
     private AppointmentFacade appointmentFacade;
