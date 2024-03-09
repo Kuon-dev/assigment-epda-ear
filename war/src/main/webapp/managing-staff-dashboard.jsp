@@ -2,7 +2,7 @@
 <html>
   <head>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Insert title here</title>
+    <title>Managing Staff Dashboard</title>
   </head>
   <body class="bg-gray-50 dark:bg-slate-900">
     <%-- ========== MAIN CONTENT ========== --%>

@@ -14,10 +14,10 @@ public class AppStartupListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        int numberOfCustomers = 10;
+        int numberOfCustomers = 50;
         int petsPerCustomer = 3;
 
-        databaseSeeder.seedDatabase(numberOfCustomers, petsPerCustomer);
+        databaseSeeder.seedDatabase(numberOfCustomers, petsPerCustomer, 50);
     }
 
     @Override

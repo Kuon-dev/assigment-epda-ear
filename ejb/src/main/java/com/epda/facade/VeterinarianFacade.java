@@ -1,12 +1,12 @@
 package com.epda.facade;
 
-import com.epda.model.Veternarian;
+import com.epda.model.Veterinarian;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 @Stateless
-public class VeternarianFacade extends AbstractFacade<Veternarian> {
+public class VeterinarianFacade extends AbstractFacade<Veterinarian> {
 
     @PersistenceContext(unitName = "epda")
     private EntityManager em;
@@ -16,7 +16,7 @@ public class VeternarianFacade extends AbstractFacade<Veternarian> {
         return em;
     }
 
-    public VeternarianFacade() {
-        super(Veternarian.class);
+    public VeterinarianFacade() {
+        super(Veterinarian.class);
     }
 }

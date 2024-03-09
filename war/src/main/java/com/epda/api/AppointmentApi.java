@@ -1,10 +1,11 @@
 package com.epda.api;
 
-import com.epda.facade.ManagingStaffFacade;
-import com.epda.model.ManagingStaff;
+import com.epda.facade.AppointmentFacade;
+import com.epda.model.Appointment;
 import jakarta.ejb.EJB;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,32 +13,38 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/api/managing-staff/*")
-public class ManagingStaffApi extends HttpServlet {
+@WebServlet("/api/appointment/*")
+public class AppointmentApi extends HttpServlet {
 
     @EJB
-    private ManagingStaffFacade managingStaffFacade;
+    private AppointmentFacade appointmentFacade;
 
     @Override
     protected void doGet(
         HttpServletRequest request,
         HttpServletResponse response
-    ) throws IOException {
+    ) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
+        String searchQuery = request.getParameter("search");
 
-        if (pathInfo == null || pathInfo.equals("/")) {
-            // Fetch all managingStaffs
-            List<ManagingStaff> managingStaffs = managingStaffFacade.findAll();
-            writeResponse(response, managingStaffs);
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            // Search for appointments using the provided query parameter
+            List<Appointment> appointments =
+                appointmentFacade.searchAppointments(searchQuery);
+            writeResponse(response, appointments);
+        } else if (pathInfo == null || pathInfo.equals("/")) {
+            // Fetch all appointments
+            List<Appointment> appointments = appointmentFacade.findAll();
+            writeResponse(response, appointments);
         } else {
-            // Fetch a single managingStaff
+            // Fetch a single appointment by ID
             String[] splits = pathInfo.split("/");
             if (splits.length == 2) {
                 try {
                     Long id = Long.parseLong(splits[1]);
-                    ManagingStaff managingStaff = managingStaffFacade.find(id);
-                    if (managingStaff != null) {
-                        writeResponse(response, managingStaff);
+                    Appointment appointment = appointmentFacade.find(id);
+                    if (appointment != null) {
+                        writeResponse(response, appointment);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);
                     }
@@ -54,15 +61,15 @@ public class ManagingStaffApi extends HttpServlet {
         HttpServletResponse response
     ) throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
-        ManagingStaff managingStaff = jsonb.fromJson(
+        Appointment appointment = jsonb.fromJson(
             request.getReader(),
-            ManagingStaff.class
+            Appointment.class
         );
 
-        if (managingStaff != null) {
-            managingStaffFacade.create(managingStaff);
+        if (appointment != null) {
+            appointmentFacade.create(appointment);
             response.setStatus(HttpServletResponse.SC_CREATED);
-            writeResponse(response, managingStaff);
+            writeResponse(response, appointment);
         } else {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -79,9 +86,9 @@ public class ManagingStaffApi extends HttpServlet {
             if (splits.length == 2) {
                 try {
                     Long id = Long.parseLong(splits[1]);
-                    ManagingStaff managingStaff = managingStaffFacade.find(id);
-                    if (managingStaff != null) {
-                        managingStaffFacade.remove(managingStaff);
+                    Appointment appointment = appointmentFacade.find(id);
+                    if (appointment != null) {
+                        appointmentFacade.remove(appointment);
                         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
                     } else {
                         response.sendError(HttpServletResponse.SC_NOT_FOUND);

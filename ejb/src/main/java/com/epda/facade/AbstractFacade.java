@@ -1,6 +1,11 @@
 package com.epda.facade;
 
+import com.epda.model.AuditLog;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Root;
 import java.util.List;
 
 public abstract class AbstractFacade<T> {
@@ -15,14 +20,17 @@ public abstract class AbstractFacade<T> {
 
     public void create(T entity) {
         getEntityManager().persist(entity);
+        logOperation("CREATE", entity);
     }
 
     public void edit(T entity) {
         getEntityManager().merge(entity);
+        logOperation("EDIT", entity);
     }
 
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
+        logOperation("REMOVE", entity);
     }
 
     public T find(Object id) {
@@ -30,31 +38,53 @@ public abstract class AbstractFacade<T> {
     }
 
     public List<T> findAll() {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        cq.select(cq.from(entityClass));
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> root = cq.from(entityClass);
+        cq.select(root);
         return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<T> findRange(int[] range) {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        cq.select(cq.from(entityClass));
-        jakarta.persistence.Query q = getEntityManager().createQuery(cq);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        Root<T> root = cq.from(entityClass);
+        cq.select(root);
+        TypedQuery<T> q = getEntityManager().createQuery(cq); // Use TypedQuery here
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
-        return q.getResultList();
+        return q.getResultList(); // This is now type-safe
     }
 
     public int count() {
-        jakarta.persistence.criteria.CriteriaQuery cq = getEntityManager()
-            .getCriteriaBuilder()
-            .createQuery();
-        jakarta.persistence.criteria.Root<T> rt = cq.from(entityClass);
-        cq.select(getEntityManager().getCriteriaBuilder().count(rt));
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<T> root = cq.from(entityClass);
+        cq.select(cb.count(root));
         jakarta.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
+    }
+
+    private void logOperation(String operation, T entity) {
+        Long entityId = getId(entity);
+        AuditLog log = new AuditLog(
+            entityClass.getSimpleName(),
+            entityId,
+            operation
+        );
+        getEntityManager().persist(log);
+    }
+
+    // This is a simplistic way to extract the ID from an entity.
+    // You'll need to adapt this method to your entities, possibly by using reflection or by requiring
+    // entities to implement a common interface that provides access to the ID.
+    private Long getId(T entity) {
+        try {
+            var method = entityClass.getMethod("getId");
+            return (Long) method.invoke(entity);
+        } catch (Exception e) {
+            // Handle exception: log it, wrap it in a runtime exception, etc.
+            return null;
+        }
     }
 }

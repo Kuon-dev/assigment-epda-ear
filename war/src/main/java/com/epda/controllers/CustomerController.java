@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/create-customer")
+@WebServlet("/receptionist/customers/new")
 public class CustomerController extends HttpServlet {
 
     @EJB
