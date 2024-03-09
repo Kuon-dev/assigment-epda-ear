@@ -13,7 +13,11 @@ dependencies {
 
     // Use the EclipseLink implementation for runtime
     runtimeOnly "org.eclipse.persistence:org.eclipse.persistence.jpa:3.0.0"
-   implementation 'org.eclipse.persistence:eclipselink:2.7.7'
+    // Jakarta JSON Processing API
+    implementation 'jakarta.json:jakarta.json-api:2.0.1'
+    runtimeOnly 'org.eclipse:yasson:2.0.2'
+    implementation 'jakarta.json.bind:jakarta.json.bind-api:2.0.0'
+    runtimeOnly 'org.eclipse:yasson:2.0.2'
 
     // PostgreSQL Driver
     runtimeOnly 'org.postgresql:postgresql:42.3.1'

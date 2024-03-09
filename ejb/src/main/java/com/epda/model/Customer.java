@@ -7,15 +7,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-// import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import lombok.NoArgsConstructor;
 
-// import com.epda.model.User;
-
-// @DiscriminatorValue("CUSTOMER")
+@NoArgsConstructor
 @Entity
 @Table(name = "Customer")
 public class Customer implements Serializable {
@@ -37,8 +35,6 @@ public class Customer implements Serializable {
     ) // Recommended to specify cascade and orphanRemoval
     private Collection<Pet> pets = new ArrayList<>();
 
-    public Customer() {}
-
     public Customer(String name, String email) {
         this.name = name;
         this.email = email;
@@ -58,5 +54,21 @@ public class Customer implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Collection<Pet> getPets() {
+        return pets;
+    }
+
+    public void setPets(Collection<Pet> pets) {
+        this.pets = pets;
     }
 }

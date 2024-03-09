@@ -1,15 +1,27 @@
 package com.epda.api;
 
 import com.epda.facade.AppointmentFacade;
+import com.epda.facade.CustomerFacade;
+import com.epda.facade.PetFacade;
+import com.epda.facade.VeterinarianFacade;
 import com.epda.model.Appointment;
+// import com.epda.model.Receptionist;
+import com.epda.model.Customer;
+import com.epda.model.Pet;
+import com.epda.model.Veterinarian;
+import com.epda.model.dto.AppointmentDTO;
+import com.epda.model.enums.AppointmentStatus;
+import com.epda.model.enums.TimeSlot;
 import jakarta.ejb.EJB;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
 
@@ -18,6 +30,15 @@ public class AppointmentApi extends HttpServlet {
 
     @EJB
     private AppointmentFacade appointmentFacade;
+
+    @EJB
+    private PetFacade petFacade;
+
+    @EJB
+    private CustomerFacade customerFacade;
+
+    @EJB
+    private VeterinarianFacade veterinarianFacade;
 
     @Override
     protected void doGet(
@@ -102,10 +123,145 @@ public class AppointmentApi extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws ServletException, IOException {
+        Jsonb jsonb = JsonbBuilder.create();
+        String pathInfo = request.getPathInfo();
+
+        // Check if the pathInfo is valid and extract the appointment ID.
+        if (
+            pathInfo == null ||
+            pathInfo.equals("/") ||
+            pathInfo.split("/").length < 2
+        ) {
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Missing appointment ID"
+            );
+            return;
+        }
+
+        Long appointmentId;
+        try {
+            appointmentId = Long.parseLong(pathInfo.split("/")[1]);
+        } catch (NumberFormatException e) {
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Invalid appointment ID format"
+            );
+            return;
+        }
+
+        try (BufferedReader reader = request.getReader()) {
+            AppointmentDTO appointmentDTO = jsonb.fromJson(
+                reader,
+                AppointmentDTO.class
+            );
+            // Now we're working with a DTO, so no need to check if IDs match.
+            // We already have the appointment ID from the URL path.
+
+            updateAppointment(appointmentId, appointmentDTO, response);
+        } catch (JsonbException ex) {
+            ex.printStackTrace();
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Invalid JSON format"
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.sendError(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "An error occurred while updating the appointment"
+            );
+        }
+    }
+
+    private void updateAppointment(
+        Long appointmentId,
+        AppointmentDTO appointmentDTO,
+        HttpServletResponse response
+    ) throws IOException {
+        Appointment existingAppointment = appointmentFacade.find(appointmentId);
+
+        if (existingAppointment == null) {
+            response.sendError(
+                HttpServletResponse.SC_NOT_FOUND,
+                "Appointment not found"
+            );
+            return;
+        }
+
+        // Find the pet record to ensure it exists
+        Pet pet = petFacade.find(appointmentDTO.getPetId());
+        Veterinarian veterinarian = veterinarianFacade.find(
+            appointmentDTO.getVeterinarianId()
+        );
+        // Now, find the customer associated with the pet to ensure they exist
+        Customer customer = (pet.getCustomer() != null)
+            ? pet.getCustomer()
+            : null;
+        if (customer == null) {
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Pet does not have an associated customer"
+            );
+            return;
+        }
+
+        // Check if the updated appointment's customer ID matches the pet's customer ID
+        // if (!customer.getId().equals(updatedAppointment.getPet().getCustomer().getId())) {
+        //     response.sendError(HttpServletResponse.SC_CONFLICT, "The pet does not belong to the given customer");
+        //     return;
+        // }
+
+        // If a veterinarian ID is provided, find and set the veterinarian.
+        // if (updatedAppointment.getVeterinarian() != null) {
+        //     Veterinarian veterinarian = veterinarianFacade.find(updatedAppointment.getVeterinarian().getId());
+        //     if (veterinarian == null) {
+        //         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid veterinarian ID");
+        //         return;
+        //     }
+        //     existingAppointment.setVeterinarian(veterinarian);
+        // }
+        // Proceed to update the existing appointment with the new details
+        existingAppointment.setPet(pet);
+        existingAppointment.setVeterinarian(veterinarian);
+        existingAppointment.setTimeSlot(
+            TimeSlot.valueOf(appointmentDTO.getTimeSlot())
+        );
+        existingAppointment.setStatus(
+            AppointmentStatus.valueOf(appointmentDTO.getStatus())
+        );
+        existingAppointment.setDiagnosis(appointmentDTO.getDiagnosis());
+        existingAppointment.setPrognosis(appointmentDTO.getPrognosis());
+
+        // Save the changes
+        appointmentFacade.edit(existingAppointment);
+        AppointmentDTO updatedDTO = AppointmentDTO.fromEntity(
+            existingAppointment
+        );
+        writeResponse(response, updatedDTO);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
     private void writeResponse(HttpServletResponse response, Object object)
         throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
         String result = jsonb.toJson(object);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(result);
+    }
+
+    private void writeResponse(
+        HttpServletResponse response,
+        AppointmentDTO appointmentDTO
+    ) throws IOException {
+        Jsonb jsonb = JsonbBuilder.create();
+        String result = jsonb.toJson(appointmentDTO);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(result);

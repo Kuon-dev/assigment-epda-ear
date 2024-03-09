@@ -2,6 +2,7 @@ package com.epda.controllers;
 
 import com.epda.facade.AppointmentFacade;
 import com.epda.facade.PetFacade;
+import com.epda.facade.VeterinarianFacade;
 import com.epda.model.Appointment;
 import com.epda.model.Customer;
 import com.epda.model.Pet;
@@ -16,8 +17,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
-@WebServlet("/appointments/edit/*")
+@WebServlet("/receptionist/appointments/edit/*")
 public class AppointmentEditController extends HttpServlet {
 
     @EJB
@@ -26,6 +28,9 @@ public class AppointmentEditController extends HttpServlet {
     @EJB
     private PetFacade petFacade;
 
+    @EJB
+    private VeterinarianFacade veterinarianFacade;
+
     @Override
     protected void doGet(
         HttpServletRequest request,
@@ -33,47 +38,73 @@ public class AppointmentEditController extends HttpServlet {
     ) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
 
-        if (pathInfo != null) {
-            try {
-                // Extract the appointment ID from the URL path
-                String[] pathParts = pathInfo.split("/");
-                if (pathParts.length >= 2) {
-                    Long appointmentId = Long.parseLong(pathParts[1]);
-                    Appointment appointment = appointmentFacade.find(
-                        appointmentId
-                    );
+        // Early return for null pathInfo
+        if (pathInfo == null) {
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Appointment ID is required"
+            );
+            return;
+        }
 
-                    if (appointment != null) {
-                        request.setAttribute("appointment", appointment);
-                        Long petId = appointment.getPet().getId();
-                        Pet pet = petFacade.find(petId);
-                        Customer customer = pet.getCustomer();
-                        Veterinarian veterinarian =
-                            appointment.getVeterinarian();
-                        request.setAttribute("customer", customer);
-                        request.setAttribute("pet", pet);
-                        request
-                            .getRequestDispatcher(
-                                "/WEB-INF/appointment-form.jsp"
-                            )
-                            .forward(request, response);
-                    } else {
-                        response.sendError(
-                            HttpServletResponse.SC_NOT_FOUND,
-                            "Appointment not found"
-                        );
-                    }
-                }
-            } catch (NumberFormatException e) {
+        try {
+            // Extract and validate the appointment ID
+            String[] pathParts = pathInfo.split("/");
+            if (pathParts.length < 2) {
                 response.sendError(
                     HttpServletResponse.SC_BAD_REQUEST,
                     "Invalid appointment ID format"
                 );
+                return;
             }
-        } else {
+
+            Long appointmentId = Long.parseLong(pathParts[1]);
+            Appointment appointment = appointmentFacade.find(appointmentId);
+
+            // Check if the appointment exists
+            if (appointment == null) {
+                response.sendError(
+                    HttpServletResponse.SC_NOT_FOUND,
+                    "Appointment not found"
+                );
+                return;
+            }
+
+            // Setting attributes for the request
+            request.setAttribute("appointment", appointment);
+
+            Pet pet = appointment.getPet();
+            Customer customer = pet.getCustomer();
+            request.setAttribute("pet", pet);
+            request.setAttribute("customer", customer);
+
+            // Handling veterinarian information
+            Veterinarian currentVet = appointment.getVeterinarian();
+            List<Veterinarian> vetList = veterinarianFacade.findByExpertise(
+                pet.getType()
+            );
+            request.setAttribute("veterinarians", vetList);
+
+            // Optionally set the selected veterinarian ID
+            if (currentVet != null) {
+                request.setAttribute("selectedVetId", currentVet.getId());
+            }
+
+            // Setting additional attributes
+            request.setAttribute("timeSlots", TimeSlot.values());
+            request.setAttribute(
+                "appointmentStatuses",
+                AppointmentStatus.values()
+            );
+
+            // Forwarding to the JSP
+            request
+                .getRequestDispatcher("/WEB-INF/appointment-form.jsp")
+                .forward(request, response);
+        } catch (NumberFormatException e) {
             response.sendError(
                 HttpServletResponse.SC_BAD_REQUEST,
-                "Appointment ID is required"
+                "Invalid appointment ID format"
             );
         }
     }
@@ -120,8 +151,9 @@ public class AppointmentEditController extends HttpServlet {
                 "Invalid format for appointment ID or date"
             );
         } catch (Exception e) {
-            // Handle other exceptions
-            e.printStackTrace(); // Consider logging this error
+            e.printStackTrace();
+            System.err.println(e.getMessage());
+            // Handle other errors
             response.sendError(
                 HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
                 "An error occurred while updating the appointment"

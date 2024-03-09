@@ -27,9 +27,10 @@ dependencies {
     compileOnly 'jakarta.persistence:jakarta.persistence-api:3.0.0'
     compileOnly 'jakarta.ejb:jakarta.ejb-api:4.0.0'
     compileOnly 'jakarta.transaction:jakarta.transaction-api:2.0.0'
-    compileOnly 'jakarta.annotation:jakarta.annotation-api:1.3.5'
     compileOnly 'jakarta.validation:jakarta.validation-api:2.0.2'
     compileOnly 'jakarta.platform:jakarta.jakartaee-web-api:9.1.0'
+
+    // compileOnly 'jakarta.annotation:jakarta.annotation-api:1.3.5'
 }
 //
 // war {

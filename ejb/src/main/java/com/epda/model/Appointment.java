@@ -1,5 +1,6 @@
 package com.epda.model;
 
+import com.epda.model.dto.AppointmentDTO;
 import com.epda.model.enums.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,16 +18,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-// import com.epda.model.User;
-
-// @DiscriminatorValue("CUSTOMER")
-@Getter
-@Setter
 @Entity
 @Table(name = "Appointment")
+@NoArgsConstructor
 public class Appointment implements Serializable {
 
     @Id
@@ -59,4 +55,83 @@ public class Appointment implements Serializable {
 
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    public Veterinarian getVeterinarian() {
+        return veterinarian;
+    }
+
+    public void setVeterinarian(Veterinarian veterinarian) {
+        this.veterinarian = veterinarian;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
+
+    public AppointmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AppointmentStatus status) {
+        this.status = status;
+    }
+
+    public String getDiagnosis() {
+        return diagnosis;
+    }
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public String getPrognosis() {
+        return prognosis;
+    }
+
+    public void setPrognosis(String prognosis) {
+        this.prognosis = prognosis;
+    }
+
+    public LocalDateTime getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public static AppointmentDTO fromEntity(Appointment appointment) {
+        AppointmentDTO dto = new AppointmentDTO();
+        dto.setId(appointment.getId());
+        dto.setPetId(appointment.getPet().getId());
+        dto.setPetName(appointment.getPet().getName());
+        dto.setVeterinarianId(appointment.getVeterinarian().getId());
+        dto.setVeterinarianName(appointment.getVeterinarian().getName());
+        dto.setTimeSlot(appointment.getTimeSlot().toString());
+        dto.setStatus(appointment.getStatus().toString());
+        dto.setDiagnosis(appointment.getDiagnosis());
+        dto.setPrognosis(appointment.getPrognosis());
+        dto.setAppointmentDate(appointment.getAppointmentDate().toString());
+        return dto;
+    }
 }
