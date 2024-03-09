@@ -11,9 +11,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-@WebServlet("/appointments/*")
+@WebServlet("/appointments/view/*")
 public class AppointmentController extends HttpServlet {
 
     @EJB
@@ -68,7 +72,6 @@ public class AppointmentController extends HttpServlet {
             startPage = Math.max(endPage - (maxPagesToShow - 1), 1);
         }
 
-        System.out.println(currentPage);
         // if there is a search query, don't paginate
         appointments = searchQuery != null && !searchQuery.isEmpty()
             ? appointments
@@ -76,11 +79,18 @@ public class AppointmentController extends HttpServlet {
                 (currentPage - 1) * 10,
                 Math.min(currentPage * 10, appointments.size())
             );
-        // appointments = appointments.subList(
-        //     (currentPage - 1) * 10,
-        //     Math.min(currentPage * 10, appointments.size())
-        // );
 
+        Map<Long, String> formattedDates = new HashMap<>();
+        appointments.forEach(appointment -> {
+            formattedDates.put(
+                appointment.getId(),
+                appointment
+                    .getAppointmentDate()
+                    .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+            );
+        });
+
+        request.setAttribute("formattedDates", formattedDates);
         request.setAttribute("encodedSearchQuery", encodedSearchQuery);
 
         request.setAttribute("startPage", startPage);
