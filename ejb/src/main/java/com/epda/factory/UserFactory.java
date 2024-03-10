@@ -1,25 +1,27 @@
 package com.epda.factory;
 
 import com.epda.model.User;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import com.epda.model.enums.AccountStatus;
+// import java.util.ArrayList;
+// import java.util.Arrays;
+// import java.util.concurrent.ThreadLocalRandom;
+// import java.util.stream.Collectors;
+import java.util.Random;
 import net.datafaker.Faker;
 
 public class UserFactory {
 
     private static final Faker faker = new Faker();
+    private static AccountStatus[] accountStatus = AccountStatus.values();
+    private static final Random random = new Random();
 
     public static void populateUserFields(User user) {
         user.setName(faker.name().fullName());
         user.setPhone(faker.phoneNumber().phoneNumber());
         user.setEmail(faker.internet().emailAddress());
         user.setPassword(faker.internet().password());
-        // user.setCreatedAt(
-        //     LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        // );
-        // user.setUpdatedAt(
-        //     LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-        // );
+
+        user.setStatus(accountStatus[(random.nextInt(accountStatus.length))]);
     }
 
     // If direct instantiation of User is allowed and makes sense in your model

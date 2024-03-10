@@ -12,12 +12,12 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@WebServlet("/appointments/view/*")
+@WebServlet("/receptionist/appointments/view/*")
 public class AppointmentViewController extends HttpServlet {
 
     @EJB
@@ -90,6 +90,9 @@ public class AppointmentViewController extends HttpServlet {
             );
         });
 
+        appointments.sort(
+            Comparator.comparing(Appointment::getUpdatedAt).reversed()
+        );
         request.setAttribute("formattedDates", formattedDates);
         request.setAttribute("encodedSearchQuery", encodedSearchQuery);
 
@@ -99,7 +102,9 @@ public class AppointmentViewController extends HttpServlet {
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("appointments", appointments);
         request
-            .getRequestDispatcher("/appointments.jsp")
+            .getRequestDispatcher(
+                "/WEB-INF/views/receptionist-appointment-table.jsp"
+            )
             .forward(request, response);
     }
 }

@@ -1,5 +1,46 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%-- Card Section --%>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.querySelector('form')
+
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        const formData = new FormData(form)
+
+        const jsonData = Object.fromEntries(formData.entries())
+
+        const actionURL = form.getAttribute('action')
+        e.preventDefault()
+
+        fetch(actionURL, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(jsonData)
+        })
+          .then((response) => {
+            if (response.ok) {
+              return response.json()
+            }
+            throw new Error('Network response was not ok.')
+          })
+          .then((data) => {
+            console.log(data)
+            // Handle success here (e.g., redirect or display a success message)
+          })
+          .catch((error) => {
+            console.error(
+              'There has been a problem with your fetch operation:',
+              error
+            )
+          })
+      })
+    }
+  })
+</script>
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <%-- Card --%>
   <div class="rounded-xl shadow p-4 sm:p-7 dark:bg-slate-800">
@@ -12,7 +53,9 @@
       </p>
     </div>
 
-    <form action="${pageContext.request.contextPath}/api/${userRole}/${user.id}">
+    <form
+      action="${pageContext.request.contextPath}/api/${userRole}/${user.id}"
+    >
       <%-- Grid --%>
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
         <%-- End Col --%>
@@ -133,46 +176,4 @@
       </div>
     </form>
   </div>
-
-  <%-- End Card --%>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.querySelector('form');
-
-    if(form) {
-        form.addEventListener('submit', function(e) {
-
-            const formData = new FormData(form);
-
-            const jsonData = Object.fromEntries(formData.entries());
-
-            const actionURL = form.getAttribute('action');
-            e.preventDefault();
-
-            fetch(actionURL, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(jsonData),
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                }
-                throw new Error('Network response was not ok.');
-            })
-            .then(data => {
-                console.log(data);
-                // Handle success here (e.g., redirect or display a success message)
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-        });
-    }
-});
-</script>
-<script module src="${pageContext.request.contextPath}/assets/js/edit-profile.js">
-<%-- End Card Section --%>

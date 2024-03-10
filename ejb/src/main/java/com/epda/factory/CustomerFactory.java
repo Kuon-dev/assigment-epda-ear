@@ -10,6 +10,8 @@ public class CustomerFactory {
     public static Customer create() {
         String name = faker.name().fullName();
         String email = faker.internet().emailAddress();
-        return new Customer(name, email);
+        String phone = faker.phoneNumber().cellPhone();
+        int age = faker.number().numberBetween(18, 100);
+        return new Customer(name, email, phone, age);
     }
 }

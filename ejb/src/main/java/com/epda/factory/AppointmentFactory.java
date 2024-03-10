@@ -4,10 +4,15 @@ import com.epda.model.Appointment;
 import com.epda.model.Pet;
 import com.epda.model.Veterinarian;
 import com.epda.model.enums.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -15,6 +20,8 @@ import net.datafaker.Faker;
 
 public class AppointmentFactory {
 
+    private static final DateTimeFormatter DATE_FORMATTER =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private static final Faker faker = new Faker();
     private static final Random random = new Random();
 
@@ -33,7 +40,12 @@ public class AppointmentFactory {
         // no all day appointments
         AppointmentStatus appointmentStatus =
             appointmentStatuses[random.nextInt(appointmentStatuses.length)];
-        LocalDateTime appointmentDate = getAppointmentDate(appointmentStatus);
+
+        LocalDate date = LocalDate.parse(getAppointmentDate(appointmentStatus));
+        LocalDateTime appointmentDateTime = LocalDateTime.of(
+            date,
+            LocalTime.MIDNIGHT
+        );
 
         appointment.setPet(pet);
         appointment.setVeterinarian(veterinarian);
@@ -41,23 +53,26 @@ public class AppointmentFactory {
         appointment.setStatus(appointmentStatus);
         appointment.setDiagnosis(faker.medical().symptoms());
         appointment.setPrognosis(faker.lorem().sentence());
-        appointment.setAppointmentDate(appointmentDate);
+        appointment.setAppointmentDate(appointmentDateTime);
 
         return appointment;
     }
 
     // check if the appointment status is completed or not, if not, set the appointment date to a future dateq
-    private static LocalDateTime getAppointmentDate(
+
+    private static String getAppointmentDate(
         AppointmentStatus appointmentStatus
     ) {
+        LocalDateTime date;
         if (appointmentStatus == AppointmentStatus.COMPLETED) {
             // Ensures completed appointments are always before today.
-            // Randomly subtracts a number of days between 1 and 30 from the current date.
-            return LocalDateTime.now().minusDays(random.nextInt(30) + 1);
+            date = LocalDateTime.now()
+                .minusDays(ThreadLocalRandom.current().nextInt(1, 31));
         } else {
             // For scheduled or cancelled appointments, ensures the dates are in the future.
-            // Randomly adds a number of days between 1 and 30 to the current date.
-            return LocalDateTime.now().plusDays(random.nextInt(30) + 1);
+            date = LocalDateTime.now()
+                .plusDays(ThreadLocalRandom.current().nextInt(1, 31));
         }
+        return date.format(DATE_FORMATTER);
     }
 }
