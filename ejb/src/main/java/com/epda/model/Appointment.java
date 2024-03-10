@@ -2,7 +2,7 @@ package com.epda.model;
 
 import com.epda.model.dto.AppointmentDTO;
 import com.epda.model.enums.*;
-import jakarta.persistence.CascadeType;
+// import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -13,7 +13,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 // import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Table;
 import java.io.Serializable;

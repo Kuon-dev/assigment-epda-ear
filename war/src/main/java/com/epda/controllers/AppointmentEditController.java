@@ -84,10 +84,10 @@ public class AppointmentEditController extends HttpServlet {
                 pet.getType()
             );
             request.setAttribute("veterinarians", vetList);
-
             // Optionally set the selected veterinarian ID
             if (currentVet != null) {
                 request.setAttribute("selectedVetId", currentVet.getId());
+                request.setAttribute("selectedVetName", currentVet.getName());
             }
 
             // Setting additional attributes
@@ -97,6 +97,8 @@ public class AppointmentEditController extends HttpServlet {
                 AppointmentStatus.values()
             );
 
+            request.setAttribute("diagnosis", appointment.getDiagnosis());
+            request.setAttribute("prognosis", appointment.getPrognosis());
             // Forwarding to the JSP
             request
                 .getRequestDispatcher("/WEB-INF/appointment-form.jsp")

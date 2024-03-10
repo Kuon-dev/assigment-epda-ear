@@ -13,6 +13,7 @@
       <form action="${pageContext.request.contextPath}/appointments/create" method="post">
         <input type="hidden" name="petId" value="${param.petId}" />
         <input type="hidden" name="customerId" value="${param.customerId}" />
+        <input type="hidden" name="veterinarianId" value="${param.veterinarianId}" />
         <!-- Time Slot -->
         <div class="mb-4">
           <label for="timeSlot" class="block text-sm font-medium mb-1">Time Slot:</label>
@@ -31,46 +32,53 @@
             </c:forEach>
           </select>
         </div>
-        <!-- Diagnosis -->
-        <div class="mb-4">
-          <label for="diagnosis" class="block text-sm font-medium mb-1">Diagnosis:</label>
-          <input type="text" id="diagnosis" name="diagnosis" required class="w-full border-gray-300 rounded-md shadow-sm" />
-        </div>
-        <!-- Prognosis -->
-        <div class="mb-4">
-          <label for="prognosis" class="block text-sm font-medium mb-1">Prognosis:</label>
-          <input type="text" id="prognosis" name="prognosis" required class="w-full border-gray-300 rounded-md shadow-sm" />
-        </div>
+
+<!-- Diagnosis -->
+<div class="mb-4">
+  <label for="diagnosis" class="block text-sm font-medium mb-1">Diagnosis:</label>
+  <input type="text" id="diagnosis" name="diagnosis" required class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm" value="${diagnosis}" />
+</div>
+<!-- Prognosis -->
+<div class="mb-4">
+  <label for="prognosis" class="block text-sm font-medium mb-1">Prognosis:</label>
+  <input type="text" id="prognosis" name="prognosis" required class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm" value="${prognosis}" />
+</div>
         <!-- Appointment Date -->
         <div class="mb-4">
           <label for="appointmentDate" class="block text-sm font-medium mb-1">Appointment Date:</label>
           <div id="calendar"></div>
           <input type="hidden" id="appointmentDate" name="appointmentDate" />
         </div>
-        <div class="flex items-center justify-center">
-          <div class="relative group">
-            <button type="button" id="dropdown-button" class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500">
-              <span class="mr-2">Select Veterinarian</span>
-              <!-- SVG icon -->
-            </button>
-            <!-- Dropdown menu -->
-            <select id="dropdown-menu" class="hidden absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 p-1 space-y-1">
-              <!-- Search input -->
-              <input id="search-input" class="block w-full px-4 py-2 text-gray-800 border rounded-md border-gray-300 focus:outline-none" type="text" placeholder="Search veterinarians" autocomplete="off">
-              <!-- Check if the veterinarians list is empty -->
-              <c:choose>
-                <c:when test="${not empty veterinarians}">
-                  <c:forEach items="${veterinarians}" var="vet">
-                    <option value="${vet.id}" ${vet.id==selectedVetId ? 'selected' : '' } class="vet-item block px-4 py-2 text-gray-700 hover:bg-gray-100 active:bg-blue-100 cursor-pointer rounded-md">${vet.name}</option>
-                  </c:forEach>
-                </c:when>
-                <c:otherwise>
-                  <div class="px-4 py-2 text-gray-700">No veterinarians found</div>
-                </c:otherwise>
-              </c:choose>
-            </select>
-          </div>
+        <!-- dropdown -->
+        
+<div class="flex items-center justify-start">
+  <label for="diagnosis" class="block text-sm font-medium mb-1">Veterinarian: </label>
+  <div class="relative group">
+    <button id="dropdown-button" type="button" class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none">
+      <span>Select Veterinarian</span>
+      <!-- SVG icon here if needed -->
+    </button>
+    <input type="hidden" name="veterinarianId" value="${param.veterinarianId}"/>
+    <input type="hidden" name="veterinarianName" value="${selectedVetName}"/>
+    <div id="dropdown-menu" class="hidden absolute z-10 mt-2 w-56 rounded-md bg-white shadow-lg">
+      <div class="py-1">
+        <input id="search-input" class="block w-full px-4 py-2 text-gray-800 border rounded-md border-gray-300 focus:outline-none" type="text" placeholder="Search veterinarians" autocomplete="off">
+        <div id="vet-list" class="mt-2 max-h-32 overflow-auto">
+          <c:if test="${not empty veterinarians}">
+            <c:forEach items="${veterinarians}" var="vet">
+              <div class="vet-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" data-id="${vet.id}">${vet.name}</div>
+            </c:forEach>
+          </c:if>
+          <c:if test="${empty veterinarians}">
+            <div class="text-center py-2 text-sm text-gray-700">No veterinarians found</div>
+          </c:if>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
         <button type="submit" class="mt-4 w-full bg-blue-500 text-white rounded-md py-2 font-medium">Submit</button>
       </form>
     </div>

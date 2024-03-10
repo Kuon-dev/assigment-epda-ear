@@ -1,6 +1,9 @@
 package com.epda.model;
 
+import com.epda.model.enums.AccountStatus;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,6 +34,10 @@ public class User {
 
     @Column(name = "passsword")
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private AccountStatus status;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -102,5 +109,13 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public AccountStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AccountStatus status) {
+        this.status = status;
     }
 }
