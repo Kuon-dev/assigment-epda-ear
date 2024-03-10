@@ -31,7 +31,7 @@ public class DatabaseSeeder {
     ) {
         // Check if the database is empty before seeding
         if (isDatabaseEmpty()) {
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 30; i++) {
                 ManagingStaff managingStaff =
                     ManagingStaffFactory.createManagingStaff();
                 em.persist(managingStaff);

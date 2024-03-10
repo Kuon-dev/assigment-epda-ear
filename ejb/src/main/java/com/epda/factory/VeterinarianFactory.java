@@ -13,13 +13,13 @@ public class VeterinarianFactory {
         Veterinarian veterinarian = new Veterinarian();
         UserFactory.populateUserFields(veterinarian);
 
-        // Randomly assign 1 to 3 unique expertises
+        // Adjusted to generate a stream of indices from 0 (inclusive) to Expertise.values().length (exclusive)
         ArrayList<Expertise> expertises = ThreadLocalRandom.current()
-            .ints(1, Expertise.values().length)
-            .distinct() // This still ensures uniqueness
-            .limit(ThreadLocalRandom.current().nextInt(1, 4))
-            .mapToObj(i -> Expertise.values()[i - 1])
-            .collect(Collectors.toCollection(ArrayList::new)); // Collect to an ArrayList
+            .ints(0, Expertise.values().length) // Now includes the possibility of selecting the last expertise
+            .distinct()
+            .limit(ThreadLocalRandom.current().nextInt(1, 4)) // Adjusted to ensure up to 3 unique expertises
+            .mapToObj(i -> Expertise.values()[i])
+            .collect(Collectors.toCollection(ArrayList::new));
 
         veterinarian.setExpertises(expertises);
         return veterinarian;

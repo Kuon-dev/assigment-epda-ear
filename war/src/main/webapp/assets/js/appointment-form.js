@@ -1,10 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
   const options = {
+  settings: {
+    selection: {
+      day: 'multiple',
+    },
+    selected: {
+      dates: [document.getElementById('appointmentDate').value.split('T')[0]],
+    },
+  },
     actions: {
       clickDay(event, self) {
-        // Assuming self.selectedDates is an array of date strings like ["2024-03-11"]
         if (self.selectedDates.length > 0) {
-          const selectedDateStr = self.selectedDates[0]; // Get the first selected date as a string
+          const selectedDateStr = self.selectedDates[self.selectedDates.length - 1]; // Get the first selected date as a string
+          console.log(selectedDateStr);
           document.getElementById('appointmentDate').value = selectedDateStr;
         }
       },
@@ -64,3 +72,74 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('appointmentForm');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // Prevent default form submission
+    submitForm(); // Call a function to submit the form via AJAX
+  });
+});
+
+function submitForm() {
+  const appointmentId = getAppointmentIdFromUrl(); // Get the appointment ID from the URL
+  if (!appointmentId) {
+    console.error('Appointment ID could not be found in the URL.');
+    return; // Early return if the appointment ID is not found
+  }
+  const formData = {
+    // Assuming you've collected the rest of the form data as before
+    petId: document.querySelector('input[name="petId"]').value,
+    veterinarianId: document.querySelector('input[name="veterinarianId"]').value,
+    timeSlot: document.getElementById('timeSlot').value,
+    status: document.getElementById('status').value,
+    diagnosis: document.getElementById('diagnosis').value,
+    prognosis: document.getElementById('prognosis').value,
+    appointmentDate: document.getElementById('appointmentDate').value,
+  };
+
+  fetch(`http://localhost:8080/api/appointment/${appointmentId}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+  })
+  .then(response => {
+    if(response.ok) {
+      return response.json();
+    }
+    throw new Error('Network response was not ok.');
+  })
+  .then(data => {
+    console.log(data);
+        Toastify({
+          text: "Successfully edited apppointment!",
+          duration: 3000,
+          style: {
+            background: "green",
+            textColor: "white"
+          }
+        }).showToast();
+  })
+  .catch(error => {
+    console.error('There has been a problem with your fetch operation:', error);
+        Toastify({
+          text: "An error occured!",
+          duration: 3000,
+          style: {
+            background: "red",
+            textColor: "white"
+          }
+        }).showToast();
+
+    // Handle the error
+  });
+}
+
+function getAppointmentIdFromUrl() {
+  const pathArray = window.location.pathname.split('/');
+  // Assuming the ID is always after '/edit/', which is true based on your example URL
+  const appointmentIdIndex = pathArray.indexOf('edit') + 1;
+  return appointmentIdIndex < pathArray.length ? pathArray[appointmentIdIndex] : null;
+}

@@ -40,7 +40,7 @@ public class ReceptionistController extends HttpServlet {
         }
         request.setAttribute("user", user);
         request
-            .getRequestDispatcher("/receptionist-dashboard.jsp")
+            .getRequestDispatcher("/WEB-INF/views/receptionist-dashboard.jsp")
             .forward(request, response);
     }
 }

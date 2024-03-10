@@ -1,4 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,32 +9,44 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js" defer></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js
+    "></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
   </head>
-  <body>
+  <body class="bg-gray-50slate-900">
+    <%-- ========== MAIN CONTENT ========== --%>
+    <%-- Sidebar Toggle --%>
+    <%-- End Sidebar Toggle --%>
+    <%-- Sidebar --%>
+    <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
+    <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
+
     <div class="max-w-lg mx-auto p-8">
       <h2 class="text-xl font-semibold mb-4">Schedule Appointment</h2>
-      <form action="${pageContext.request.contextPath}/appointments/create" method="post">
-        <input type="hidden" name="petId" value="${param.petId}" />
-        <input type="hidden" name="customerId" value="${param.customerId}" />
-        <input type="hidden" name="veterinarianId" value="${param.veterinarianId}" />
+      <form id="appointmentForm">
+        <input type="hidden" name="petId" value="${pet.getId()}" />
+        <input type="hidden" name="customerId" value="${customer.getId()}" />
+        <input type="hidden" name="appointmentDate" id="appointmentDate" value="${appointmentDate}" />
         <!-- Time Slot -->
-        <div class="mb-4">
-          <label for="timeSlot" class="block text-sm font-medium mb-1">Time Slot:</label>
-          <select id="timeSlot" name="timeSlot" class="... your classes ...">
-            <c:forEach var="timeSlot" items="${timeSlots}">
-              <option value="${timeSlot}">${timeSlot}</option>
-            </c:forEach>
-          </select>
-        </div>
-        <!-- Appointment Status Dropdown -->
-        <div class="mb-4">
-          <label for="status" class="block text-sm font-medium mb-1">Status:</label>
-          <select id="status" name="status" class="... your classes ...">
-            <c:forEach var="status" items="${appointmentStatuses}">
-              <option value="${status}">${status}</option>
-            </c:forEach>
-          </select>
-        </div>
+
+<div class="mb-4">
+  <label for="timeSlot" class="block text-sm font-medium mb-1">Time Slot:</label>
+  <select id="timeSlot" name="timeSlot" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+    <c:forEach var="timeSlot" items="${timeSlots}">
+      <option value="${timeSlot}" ${timeSlot == appointment.timeSlot ? 'selected' : ''}>${timeSlot}</option>
+    </c:forEach>
+  </select>
+</div>
+<!-- Appointment Status Dropdown -->
+<div class="mb-4">
+  <label for="status" class="block text-sm font-medium mb-1">Status:</label>
+  <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+    <c:forEach var="status" items="${appointmentStatuses}">
+      <option value="${status}" ${status == appointment.status ? 'selected' : ''}>${status}</option>
+    </c:forEach>
+  </select>
+</div>
 
 <!-- Diagnosis -->
 <div class="mb-4">
@@ -51,14 +66,14 @@
         </div>
         <!-- dropdown -->
         
-<div class="flex items-center justify-start">
+<div class="flex items-center justify-start gap-5">
   <label for="diagnosis" class="block text-sm font-medium mb-1">Veterinarian: </label>
   <div class="relative group">
     <button id="dropdown-button" type="button" class="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none">
       <span>Select Veterinarian</span>
       <!-- SVG icon here if needed -->
     </button>
-    <input type="hidden" name="veterinarianId" value="${param.veterinarianId}"/>
+    <input type="hidden" name="veterinarianId" value="${selectedVetId}"/>
     <input type="hidden" name="veterinarianName" value="${selectedVetName}"/>
     <div id="dropdown-menu" class="hidden absolute z-10 mt-2 w-56 rounded-md bg-white shadow-lg">
       <div class="py-1">
@@ -82,6 +97,8 @@
         <button type="submit" class="mt-4 w-full bg-blue-500 text-white rounded-md py-2 font-medium">Submit</button>
       </form>
     </div>
+    </div>
+
     <script src="${pageContext.request.contextPath}/assets/js/appointment-form.js"></script>
   </body>
 </html>

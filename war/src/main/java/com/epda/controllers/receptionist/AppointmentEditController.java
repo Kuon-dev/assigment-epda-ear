@@ -1,4 +1,4 @@
-package com.epda.controllers;
+package com.epda.controllers.receptionist;
 
 import com.epda.facade.AppointmentFacade;
 import com.epda.facade.PetFacade;
@@ -77,6 +77,11 @@ public class AppointmentEditController extends HttpServlet {
             Customer customer = pet.getCustomer();
             request.setAttribute("pet", pet);
             request.setAttribute("customer", customer);
+            // parse appointment date as string in yyyy-MM-dd format
+            request.setAttribute(
+                "appointmentDate",
+                appointment.getAppointmentDate().toString()
+            );
 
             // Handling veterinarian information
             Veterinarian currentVet = appointment.getVeterinarian();
@@ -101,7 +106,9 @@ public class AppointmentEditController extends HttpServlet {
             request.setAttribute("prognosis", appointment.getPrognosis());
             // Forwarding to the JSP
             request
-                .getRequestDispatcher("/WEB-INF/appointment-form.jsp")
+                .getRequestDispatcher(
+                    "/WEB-INF/views/receptionist/appointment-form.jsp"
+                )
                 .forward(request, response);
         } catch (NumberFormatException e) {
             response.sendError(

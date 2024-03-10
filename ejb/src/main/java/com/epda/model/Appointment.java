@@ -13,10 +13,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 // import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -54,6 +57,22 @@ public class Appointment implements Serializable {
 
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
+
+    @Column(name = "created_at")
+    private Date createdAt;
+
+    @Column(name = "updated_at")
+    private Date updatedAt;
+
+    @PrePersist
+    void createdAt() {
+        this.createdAt = this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    void updatedAt() {
+        this.updatedAt = new Date();
+    }
 
     public Long getId() {
         return id;
@@ -117,6 +136,14 @@ public class Appointment implements Serializable {
 
     public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
     public static AppointmentDTO fromEntity(Appointment appointment) {
