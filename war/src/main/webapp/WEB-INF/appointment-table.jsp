@@ -14,7 +14,7 @@
   <body>
     <div class="container mx-auto mt-5">
       <form
-        action="${pageContext.request.contextPath}/appointments"
+        action="${pageContext.request.contextPath}/receptionist/appointments/view/"
         method="get"
         class="mb-4"
       >
