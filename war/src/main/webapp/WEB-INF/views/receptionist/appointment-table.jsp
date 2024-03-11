@@ -31,6 +31,14 @@
           Search
           </button>
         </form>
+        <div>
+          <a
+            href="${pageContext.request.contextPath}/receptionist/appointments/add"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+          Add Appointment
+          </a>
+        </div>
       </div>
       <div class="container mx-auto mt-10">
         <h1 class="text-xl font-bold mb-5">Appointments</h1>
@@ -56,9 +64,6 @@
                       <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Diagnosis</p>
                     </th>
                     <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Prognosis</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                       <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Status</p>
                     </th>
                     <!-- If you need action buttons like edit, add the column header here as in your provided example -->
@@ -75,7 +80,6 @@
                       <td class="p-4 border-b border-blue-gray-50">${appointment.pet.name}</td>
                       <td class="p-4 border-b border-blue-gray-50">${appointment.pet.customer.name}</td>
                       <td class="p-4 border-b border-blue-gray-50">${appointment.diagnosis}</td>
-                      <td class="p-4 border-b border-blue-gray-50">${appointment.prognosis}</td>
                       <td class="p-4 border-b border-blue-gray-50 
                         ${appointment.status == 'COMPLETED' ? 'bg-emerald-600' : 
                         appointment.status == 'SCHEDULED' ? 'bg-sky-600' : 'bg-red-600'}">

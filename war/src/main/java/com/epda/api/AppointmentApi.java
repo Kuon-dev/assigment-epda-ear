@@ -85,17 +85,61 @@ public class AppointmentApi extends HttpServlet {
         HttpServletResponse response
     ) throws IOException {
         Jsonb jsonb = JsonbBuilder.create();
-        Appointment appointment = jsonb.fromJson(
-            request.getReader(),
-            Appointment.class
-        );
+        try (BufferedReader reader = request.getReader()) {
+            AppointmentDTO appointmentDTO = jsonb.fromJson(
+                reader,
+                AppointmentDTO.class
+            );
 
-        if (appointment != null) {
+            Pet pet = petFacade.find(appointmentDTO.getPetId());
+            Veterinarian veterinarian = veterinarianFacade.find(
+                appointmentDTO.getVeterinarianId()
+            );
+            if (pet == null || veterinarian == null) {
+                response.sendError(
+                    HttpServletResponse.SC_BAD_REQUEST,
+                    "Pet or Veterinarian not found"
+                );
+                return;
+            }
+
+            LocalDate date = LocalDate.parse(
+                appointmentDTO.getAppointmentDate()
+            );
+            LocalDateTime appointmentDateTime = LocalDateTime.of(
+                date,
+                LocalTime.MIDNIGHT
+            );
+
+            Appointment appointment = new Appointment();
+            appointment.setPet(pet);
+            appointment.setVeterinarian(veterinarian);
+            appointment.setTimeSlot(
+                TimeSlot.valueOf(appointmentDTO.getTimeSlot())
+            );
+            appointment.setStatus(
+                AppointmentStatus.valueOf(appointmentDTO.getStatus())
+            );
+            appointment.setDiagnosis(appointmentDTO.getDiagnosis());
+            appointment.setPrognosis(appointmentDTO.getPrognosis());
+            appointment.setAppointmentDate(appointmentDateTime);
+
             appointmentFacade.create(appointment);
+
             response.setStatus(HttpServletResponse.SC_CREATED);
-            writeResponse(response, appointment);
-        } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            writeResponse(response, AppointmentDTO.fromEntity(appointment));
+        } catch (JsonbException ex) {
+            ex.printStackTrace();
+            response.sendError(
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Invalid JSON format"
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            response.sendError(
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "An error occurred while creating the appointment"
+            );
         }
     }
 
@@ -221,21 +265,6 @@ public class AppointmentApi extends HttpServlet {
         );
         existingAppointment.setAppointmentDate(appointmentDateTime);
 
-        // Check if the updated appointment's customer ID matches the pet's customer ID
-        // if (!customer.getId().equals(updatedAppointment.getPet().getCustomer().getId())) {
-        //     response.sendError(HttpServletResponse.SC_CONFLICT, "The pet does not belong to the given customer");
-        //     return;
-        // }
-
-        // If a veterinarian ID is provided, find and set the veterinarian.
-        // if (updatedAppointment.getVeterinarian() != null) {
-        //     Veterinarian veterinarian = veterinarianFacade.find(updatedAppointment.getVeterinarian().getId());
-        //     if (veterinarian == null) {
-        //         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid veterinarian ID");
-        //         return;
-        //     }
-        //     existingAppointment.setVeterinarian(veterinarian);
-        // }
         // Proceed to update the existing appointment with the new details
         existingAppointment.setPet(pet);
         existingAppointment.setVeterinarian(veterinarian);
