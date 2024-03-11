@@ -1,5 +1,6 @@
 package com.epda.controllers;
 
+import com.epda.config.ServletExceptionConfig;
 import com.epda.facade.PetFacade;
 import com.epda.model.Pet;
 import jakarta.ejb.EJB;
@@ -23,44 +24,42 @@ public class PetViewController extends HttpServlet {
         HttpServletResponse response
     ) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        int currentPage = 1;
+        Long customerId = null;
         if (pathInfo != null && !pathInfo.isEmpty()) {
             String[] splits = pathInfo.split("/");
             if (splits.length > 1) {
                 try {
-                    currentPage = Integer.parseInt(splits[1]);
+                    customerId = Long.parseLong(splits[1]);
                 } catch (NumberFormatException e) {
-                    currentPage = 1;
+                    // customer not found
+                    ServletExceptionConfig.sendError(
+                        response,
+                        HttpServletResponse.SC_NOT_FOUND,
+                        "Customer not found"
+                    );
                 }
             }
         }
 
+        if (customerId == null) {
+            // customer not found
+            ServletExceptionConfig.sendError(
+                response,
+                HttpServletResponse.SC_NOT_FOUND,
+                "Customer not found"
+            );
+        }
+
         String searchQuery = request.getParameter("search");
         List<Pet> pets;
-        int totalPets;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
             pets = petFacade.findByPetName(searchQuery);
-            totalPets = pets.size();
         } else {
-            pets = petFacade.findAll();
-            totalPets = petFacade.count();
-        }
-
-        int totalPages = (int) Math.ceil((double) totalPets / 10);
-        int maxPagesToShow = 5;
-        int halfPagesToShow = maxPagesToShow / 2;
-        int startPage = Math.max(currentPage - halfPagesToShow, 1);
-        int endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
-        if (endPage - startPage < maxPagesToShow - 1) {
-            startPage = Math.max(endPage - (maxPagesToShow - 1), 1);
+            pets = petFacade.findByCustomerId(customerId);
         }
 
         request.setAttribute("pets", pets);
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("startPage", startPage);
-        request.setAttribute("endPage", endPage);
         request.setAttribute("searchQuery", searchQuery);
         request
             .getRequestDispatcher("/WEB-INF/views/receptionist/pet-table.jsp")

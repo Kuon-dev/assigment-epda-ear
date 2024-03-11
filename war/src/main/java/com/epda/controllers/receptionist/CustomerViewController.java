@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/receptionist/customers/view/*")
@@ -36,10 +38,17 @@ public class CustomerViewController extends HttpServlet {
         }
 
         String searchQuery = request.getParameter("search");
+        String encodedSearchQuery = "";
+
         List<Customer> customers;
         int totalCustomers;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
+            encodedSearchQuery = URLEncoder.encode(
+                searchQuery,
+                StandardCharsets.UTF_8.toString()
+            );
+
             customers = customerFacade.findByEmail(searchQuery);
             totalCustomers = customers != null ? customers.size() : 0;
         } else {

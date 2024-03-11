@@ -25,11 +25,12 @@ public class CustomerFacade extends AbstractFacade<Customer> {
     }
 
     public List<Customer> findByEmail(String email) {
+        // search customer by email
         TypedQuery<Customer> query = em.createQuery(
-            "SELECT c FROM Customer c WHERE c.email = :email",
+            "SELECT c FROM Customer c WHERE c.email LIKE :email",
             Customer.class
         );
-        query.setParameter("email", email);
+        query.setParameter("email", email + "%");
         List<Customer> customers = query.getResultList();
 
         if (!customers.isEmpty()) {
