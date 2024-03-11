@@ -44,57 +44,59 @@
         <h1 class="text-xl font-bold mb-5">Appointments</h1>
         <c:choose>
           <c:when test="${not empty appointments}">
-            <div class="relative flex flex-col w-full h-full overflow-scroll text-gray-700 bg-white shadow-md rounded-xl bg-clip-border max-h-[60vh]">
-              <table class="w-full text-left table-auto min-w-max">
-                <thead>
-                  <tr>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">ID</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Date</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Pet Name</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Customer Name</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Diagnosis</p>
-                    </th>
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Status</p>
-                    </th>
-                    <!-- If you need action buttons like edit, add the column header here as in your provided example -->
-                    <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
-                      <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Actions</p>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <c:forEach var="appointment" items="${appointments}">
-                    <tr>
-                      <td class="p-4 border-b border-blue-gray-50">${appointment.id}</td>
-                      <td class="p-4 border-b border-blue-gray-50">${formattedDates[appointment.id]}</td>
-                      <td class="p-4 border-b border-blue-gray-50">${appointment.pet.name}</td>
-                      <td class="p-4 border-b border-blue-gray-50">${appointment.pet.customer.name}</td>
-                      <td class="p-4 border-b border-blue-gray-50">${appointment.diagnosis}</td>
-                      <td class="p-4 border-b border-blue-gray-50 
-                        ${appointment.status == 'COMPLETED' ? 'bg-emerald-600' : 
-                        appointment.status == 'SCHEDULED' ? 'bg-sky-600' : 'bg-red-600'}">
-                        <p class="text-white text-sm font-medium">${appointment.status}</p>
-                      </td>
-                      <!-- Edit Button -->
-                      <td class="p-4 border-b border-blue-gray-50">
-                        <a href="${pageContext.request.contextPath}/receptionist/appointments/edit/${appointment.id}" class="inline-block px-6 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
-                        Edit
-                        </a>
-                      </td>
-                    </tr>
-                  </c:forEach>
-                </tbody>
-              </table>
+            <div class="relative flex flex-col w-full max-h-[60vh]">
+              <div class="overflow-x-auto">
+                <div class="inline-block min-w-full overflow-hidden">
+                  <table class="w-full text-left table-auto">
+                    <thead class="sticky top-0 z-10 bg-white">
+                      <tr>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">ID</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Date</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Pet Name</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Customer Name</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Diagnosis</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Status</p>
+                        </th>
+                        <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                          <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Actions</p>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="overflow-y-auto">
+                      <c:forEach var="appointment" items="${appointments}">
+                        <tr>
+                          <td class="p-4 border-b border-blue-gray-50">${appointment.id}</td>
+                          <td class="p-4 border-b border-blue-gray-50">${formattedDates[appointment.id]}</td>
+                          <td class="p-4 border-b border-blue-gray-50">${appointment.pet.name}</td>
+                          <td class="p-4 border-b border-blue-gray-50">${appointment.pet.customer.name}</td>
+                          <td class="p-4 border-b border-blue-gray-50">${appointment.diagnosis}</td>
+                          <td class="p-4 border-b border-blue-gray-50 
+                            ${appointment.status == 'COMPLETED' ? 'bg-emerald-600' : 
+                            appointment.status == 'SCHEDULED' ? 'bg-sky-600' : 'bg-red-600'}">
+                            <p class="text-white text-sm font-medium">${appointment.status}</p>
+                          </td>
+                          <td class="p-4 border-b border-blue-gray-50">
+                            <a href="${pageContext.request.contextPath}/receptionist/appointments/edit/${appointment.id}" class="inline-block px-6 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+                            Edit
+                            </a>
+                          </td>
+                        </tr>
+                      </c:forEach>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
             <%-- Pagination here --%>
           </c:when>

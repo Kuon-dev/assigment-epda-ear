@@ -1,7 +1,7 @@
-package com.epda.controllers;
+package com.epda.controllers.receptionist;
 
-import com.epda.facade.PetFacade;
-import com.epda.model.Pet;
+import com.epda.facade.CustomerFacade;
+import com.epda.model.Customer;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,11 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet("/receptionist/pets/view/*")
-public class PetViewController extends HttpServlet {
+@WebServlet("/receptionist/customers/view/*")
+public class CustomerViewController extends HttpServlet {
 
     @EJB
-    private PetFacade petFacade;
+    private CustomerFacade customerFacade;
 
     @Override
     protected void doGet(
@@ -36,18 +36,18 @@ public class PetViewController extends HttpServlet {
         }
 
         String searchQuery = request.getParameter("search");
-        List<Pet> pets;
-        int totalPets;
+        List<Customer> customers;
+        int totalCustomers;
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
-            pets = petFacade.findByPetName(searchQuery);
-            totalPets = pets.size();
+            customers = customerFacade.findByEmail(searchQuery);
+            totalCustomers = customers.size();
         } else {
-            pets = petFacade.findAll();
-            totalPets = petFacade.count();
+            customers = customerFacade.findAll();
+            totalCustomers = customerFacade.count();
         }
 
-        int totalPages = (int) Math.ceil((double) totalPets / 10);
+        int totalPages = (int) Math.ceil((double) totalCustomers / 10);
         int maxPagesToShow = 5;
         int halfPagesToShow = maxPagesToShow / 2;
         int startPage = Math.max(currentPage - halfPagesToShow, 1);
@@ -56,14 +56,16 @@ public class PetViewController extends HttpServlet {
             startPage = Math.max(endPage - (maxPagesToShow - 1), 1);
         }
 
-        request.setAttribute("pets", pets);
+        request.setAttribute("customers", customers);
         request.setAttribute("currentPage", currentPage);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("startPage", startPage);
         request.setAttribute("endPage", endPage);
         request.setAttribute("searchQuery", searchQuery);
         request
-            .getRequestDispatcher("/WEB-INF/views/receptionist/pet-table.jsp")
+            .getRequestDispatcher(
+                "/WEB-INF/views/receptionist/customer-table.jsp"
+            )
             .forward(request, response);
     }
 }

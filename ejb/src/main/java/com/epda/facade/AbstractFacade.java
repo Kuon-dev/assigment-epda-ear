@@ -6,7 +6,10 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.metamodel.Attribute;
+import jakarta.persistence.metamodel.EntityType;
 import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractFacade<T> {
 
@@ -38,10 +41,29 @@ public abstract class AbstractFacade<T> {
     }
 
     public List<T> findAll() {
+        // CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        // CriteriaQuery<T> cq = cb.createQuery(entityClass);
+        // Root<T> root = cq.from(entityClass);
+        // cq.select(root);
+        // return getEntityManager().createQuery(cq).getResultList();
+
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<T> cq = cb.createQuery(entityClass);
         Root<T> root = cq.from(entityClass);
-        cq.select(root);
+
+        // Attempt to sort by "updatedAt" if the attribute exists
+        EntityType<T> entityType = getEntityManager()
+            .getMetamodel()
+            .entity(entityClass);
+        Set<Attribute<? super T, ?>> attributes = entityType.getAttributes();
+        boolean hasUpdatedAt = attributes
+            .stream()
+            .anyMatch(attr -> attr.getName().equals("updatedAt"));
+
+        if (hasUpdatedAt) {
+            cq.orderBy(cb.desc(root.get("updatedAt")));
+        }
+
         return getEntityManager().createQuery(cq).getResultList();
     }
 
