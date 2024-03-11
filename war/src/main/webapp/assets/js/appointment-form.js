@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
       clickDay(event, self) {
         if (self.selectedDates.length > 0) {
           const selectedDateStr = self.selectedDates[self.selectedDates.length - 1]; // Get the first selected date as a string
-          console.log(selectedDateStr);
+          self.selectedDates.shift();
           document.getElementById('appointmentDate').value = selectedDateStr;
         }
       },

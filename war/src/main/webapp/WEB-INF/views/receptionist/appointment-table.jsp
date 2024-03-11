@@ -8,16 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>APU Veterinary Clinic System</title>
   </head>
-  <body class="bg-gray-50slate-900">
-    <%-- ========== MAIN CONTENT ========== --%>
-    <%-- Sidebar Toggle --%>
-    <%-- End Sidebar Toggle --%>
-    <%-- Sidebar --%>
+  <body class="bg-gray-50">
     <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
       <div class="container mx-auto mt-5">
         <form
-          action="${pageContext.request.contextPath}/appointments"
+          action="${pageContext.request.contextPath}/receiptionist/appointments/view/"
           method="get"
           class="mb-4"
           >

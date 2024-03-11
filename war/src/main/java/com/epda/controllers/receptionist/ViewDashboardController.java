@@ -1,4 +1,4 @@
-package com.epda.controllers;
+package com.epda.controllers.receptionist;
 
 import com.epda.facade.ReceptionistFacade;
 import com.epda.model.Receptionist;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/receptionist/edit-profile")
-public class ReceptionistController extends HttpServlet {
+public class ViewDashboardController extends HttpServlet {
 
     @EJB
     private ReceptionistFacade receptionistFacade;
@@ -40,7 +40,7 @@ public class ReceptionistController extends HttpServlet {
         }
         request.setAttribute("user", user);
         request
-            .getRequestDispatcher("/WEB-INF/views/receptionist-dashboard.jsp")
+            .getRequestDispatcher("/WEB-INF/views/receptionist/dashboard.jsp")
             .forward(request, response);
     }
 }

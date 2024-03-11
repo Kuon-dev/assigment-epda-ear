@@ -43,6 +43,20 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         super(Appointment.class);
     }
 
+    public List<Appointment> findAppointments(String sortBy, String order) {
+        // Constructing the query string with dynamic sorting
+        String queryString =
+            "SELECT a FROM Appointment a ORDER BY a." + sortBy + " " + order;
+
+        TypedQuery<Appointment> query = em.createQuery(
+            queryString,
+            Appointment.class
+        );
+        // query.setFirstResult((pageNumber - 1) * PAGE_SIZE);
+        // query.setMaxResults(PAGE_SIZE);
+        return query.getResultList();
+    }
+
     // Inside AppointmentFacade
     public List<Appointment> searchAppointments(String customerName) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
