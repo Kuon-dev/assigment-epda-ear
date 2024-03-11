@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   </head>
   <body class="bg-gray-50">
+    <div color="hidden" id="servletException"><%=exception.getMessage() %></div>
     <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
       <div class="container mx-auto mt-5">

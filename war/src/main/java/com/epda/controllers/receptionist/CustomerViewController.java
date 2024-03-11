@@ -41,11 +41,18 @@ public class CustomerViewController extends HttpServlet {
 
         if (searchQuery != null && !searchQuery.isEmpty()) {
             customers = customerFacade.findByEmail(searchQuery);
-            totalCustomers = customers.size();
+            totalCustomers = customers != null ? customers.size() : 0;
         } else {
             customers = customerFacade.findAll();
             totalCustomers = customerFacade.count();
         }
+
+        customers = searchQuery != null && !searchQuery.isEmpty()
+            ? customers
+            : customers.subList(
+                (currentPage - 1) * 10,
+                Math.min(currentPage * 10, customers.size())
+            );
 
         int totalPages = (int) Math.ceil((double) totalCustomers / 10);
         int maxPagesToShow = 5;

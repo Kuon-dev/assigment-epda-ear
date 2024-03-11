@@ -123,9 +123,10 @@ function submitForm() {
         }).showToast();
   })
   .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
+        console.error('There has been a problem with your fetch operation:', error);
+        const err = document.getElementById('servletException').textContent;
         Toastify({
-          text: "An error occured!",
+          text: `An error occured! ${err}`,
           duration: 3000,
           style: {
             background: "red",
