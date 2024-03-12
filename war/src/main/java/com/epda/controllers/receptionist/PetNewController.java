@@ -32,7 +32,7 @@ public class PetNewController extends HttpServlet {
 
         request.setAttribute("customerId", customerIdString);
         request
-            .getRequestDispatcher("/WEB-INF/views/receptionist/pet-form.jsp")
+            .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
             .forward(request, response);
     }
 
@@ -52,9 +52,7 @@ public class PetNewController extends HttpServlet {
         if (customer == null) {
             request.setAttribute("errorMessage", "Customer not found.");
             request
-                .getRequestDispatcher(
-                    "/WEB-INF/views/receptionist/pet-form.jsp"
-                )
+                .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
                 .forward(request, response);
             return;
         }
@@ -77,17 +75,13 @@ public class PetNewController extends HttpServlet {
             // Set success message
             request.setAttribute("successMessage", "Pet created successfully.");
             request
-                .getRequestDispatcher(
-                    "/WEB-INF/views/receptionist/pet-form.jsp"
-                )
+                .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
                 .forward(request, response);
         } catch (NumberFormatException e) {
             // Handling age parse failure
             request.setAttribute("errorMessage", "Invalid age provided.");
             request
-                .getRequestDispatcher(
-                    "/WEB-INF/views/receptionist/pet-form.jsp"
-                )
+                .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
                 .forward(request, response);
         } catch (Exception e) {
             // General failure
@@ -96,9 +90,7 @@ public class PetNewController extends HttpServlet {
                 "Failed to create pet: " + e.getMessage()
             );
             request
-                .getRequestDispatcher(
-                    "/WEB-INF/views/receptionist/pet-form.jsp"
-                )
+                .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
                 .forward(request, response);
         }
     }
