@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @WebServlet("/api/schedule/*")
@@ -64,6 +65,65 @@ public class ScheduleApi extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(result);
+    }
+
+    @Override
+    protected void doDelete(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
+        // Extract query parameters
+        String vetIdParam = request.getParameter("vet_id");
+        String dateParam = request.getParameter("date");
+
+        if (vetIdParam == null || dateParam == null) {
+            ServletExceptionConfig.sendError(
+                response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Missing vet_id or date parameter."
+            );
+            return;
+        }
+
+        Long vetId;
+        LocalDate date;
+        try {
+            vetId = Long.parseLong(vetIdParam);
+            date = LocalDate.parse(dateParam);
+        } catch (NumberFormatException | DateTimeParseException e) {
+            ServletExceptionConfig.sendError(
+                response,
+                HttpServletResponse.SC_BAD_REQUEST,
+                "Invalid vet_id or date format."
+            );
+            return;
+        }
+
+        try {
+            List<Schedule> schedules = scheduleFacade.findScheduleByVetAndDate(
+                vetId,
+                date
+            );
+            if (schedules.isEmpty()) {
+                ServletExceptionConfig.sendError(
+                    response,
+                    HttpServletResponse.SC_NOT_FOUND,
+                    "Schedule not found."
+                );
+                return;
+            }
+
+            // Assuming only one schedule per veterinarian per day.
+            Schedule scheduleToDelete = schedules.get(0);
+            scheduleFacade.remove(scheduleToDelete);
+            response.setStatus(HttpServletResponse.SC_NO_CONTENT); // 204 status code for successful deletion without returning content
+        } catch (Exception e) {
+            ServletExceptionConfig.sendError(
+                response,
+                HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+                "Error deleting schedule."
+            );
+        }
     }
 
     @Override

@@ -13,15 +13,14 @@ function openDialog(buttonElement) {
     let dialogContent = document.getElementById('dialog-content');
     dialogContent.innerHTML = `
         <form id="scheduleForm">
-            <select name="timeSlot" id="timeSlotSelect">
+            <select name="shift" id="timeSlotSelect">
                 <option value="MORNING" ${shift === 'MORNING' ? 'selected' : ''}>Morning</option>
                 <option value="AFTERNOON" ${shift === 'AFTERNOON' ? 'selected' : ''}>Afternoon</option>
                 <option value="ALL_DAY" ${shift === 'ALL_DAY' ? 'selected' : ''}>All Day</option>
                 <option value="NOT_SCHEDULED" ${shift === 'NOT SCHEDULED' ? 'selected' : ''}>Not Scheduled</option>
             </select>
-            <input type="hidden" name="vetId" value="${vetId}">
+            <input type="hidden" name="vet_id" value="${vetId}">
             <input type="hidden" name="date" value="${date}">
-            <input type="hidden" name="dayIndex" value="${dayIndex}">
             <button type="submit">Update</button>
         </form>
     `;
@@ -35,4 +34,89 @@ function closeDialog() {
     document.getElementById('dialog-content').innerHTML = '';
 }
 
+
+document.getElementById("confirmButton").addEventListener("click", function() {
+    const formData = new FormData(document.getElementById("scheduleForm"));
+    const shift = formData.get("shift");
+    const vetId = formData.get("vet_id");
+    const date = formData.get("date");
+
+    if (shift === "NOT_SCHEDULED") {
+        // Perform DELETE request
+        fetch(`/api/schedule/?vet_id=${vetId}&date=${date}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => {
+        // response 204
+            if (response.status !== 204) {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .then(() => {
+            Toastify({
+                text: "Appointment successfully deleted!",
+                duration: 3000,
+                style: {
+                    background: "green",
+                    color: "white"
+                }
+            }).showToast();
+            closeDialog(); // Close the dialog
+            window.location.reload(); // Refresh the page to reflect changes
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            Toastify({
+                text: "Error deleting appointment.",
+                duration: 3000,
+                style: {
+                    background: "red",
+                    color: "white"
+                }
+            }).showToast();
+        });
+    } else {
+        // Perform POST request for updating/creating the schedule
+        const data = Object.fromEntries(formData.entries());
+        fetch('/api/schedule/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(() => {
+            Toastify({
+                text: "Successfully edited appointment!",
+                duration: 3000,
+                style: {
+                    background: "green",
+                    color: "white"
+                }
+            }).showToast();
+            closeDialog(); // Close the dialog
+            window.location.reload(); // Refresh the page to reflect changes
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            Toastify({
+                text: "Error editing appointment.",
+                duration: 3000,
+                style: {
+                    background: "red",
+                    color: "white"
+                }
+            }).showToast();
+        });
+    }
+});
 

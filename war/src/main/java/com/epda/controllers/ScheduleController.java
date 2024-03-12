@@ -4,6 +4,7 @@ import com.epda.facade.ScheduleFacade;
 import com.epda.facade.VeterinarianFacade;
 import com.epda.model.Schedule;
 import com.epda.model.Veterinarian;
+import com.epda.model.enums.Expertise;
 import com.epda.model.enums.TimeSlot;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
@@ -18,8 +19,12 @@ import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @WebServlet("/ScheduleController")
@@ -59,7 +64,7 @@ public class ScheduleController extends HttpServlet {
         List<Schedule> schedules = scheduleFacade.findSchedulesForWeek(
             startOfWeek,
             endOfWeek
-        ); // Your logic to fetch schedules
+        );
         List<Date> weekDates = new ArrayList<>();
 
         for (int i = 0; i <= 6; i++) {
@@ -81,8 +86,81 @@ public class ScheduleController extends HttpServlet {
             )
             .collect(Collectors.toList());
 
-        request.setAttribute("weekLocalDates", weekLocalDates);
+        // get expertise
+        Map<LocalDate, List<Expertise>> expertisesPerDayMorning =
+            new HashMap<>();
+        Map<LocalDate, List<Expertise>> expertisesPerDayAfternoon =
+            new HashMap<>();
+        // Logger logger = Logger.getLogger(getClass().getName());
 
+        schedules.forEach(schedule -> {
+            Veterinarian vet = schedule.getVeterinarian(); // Ensure Schedule entity has getVeterinarian()
+            TimeSlot shift = schedule.getShift(); // Ensure Schedule entity has getShift()
+
+            vet
+                .getExpertises()
+                .forEach(expertise -> {
+                    switch (shift) {
+                        case MORNING:
+                            expertisesPerDayMorning
+                                .computeIfAbsent(
+                                    schedule.getDate(),
+                                    k -> new ArrayList<>()
+                                )
+                                .add(expertise);
+                            break;
+                        case AFTERNOON:
+                            expertisesPerDayAfternoon
+                                .computeIfAbsent(
+                                    schedule.getDate(),
+                                    k -> new ArrayList<>()
+                                )
+                                .add(expertise);
+                            break;
+                        case ALL_DAY:
+                            // If it's an all-day schedule, add to both morning and afternoon
+                            expertisesPerDayMorning
+                                .computeIfAbsent(
+                                    schedule.getDate(),
+                                    k -> new ArrayList<>()
+                                )
+                                .add(expertise);
+                            expertisesPerDayAfternoon
+                                .computeIfAbsent(
+                                    schedule.getDate(),
+                                    k -> new ArrayList<>()
+                                )
+                                .add(expertise);
+                            break;
+                    }
+                });
+        });
+
+        // Optional: To ensure there are no duplicates in the lists
+        expertisesPerDayMorning.forEach(
+            (date, expertises) ->
+                expertisesPerDayMorning.put(
+                    date,
+                    new ArrayList<>(new HashSet<>(expertises))
+                )
+        );
+        expertisesPerDayAfternoon.forEach(
+            (date, expertises) ->
+                expertisesPerDayAfternoon.put(
+                    date,
+                    new ArrayList<>(new HashSet<>(expertises))
+                )
+        );
+        // logger.info("Expertise: " + expertisesPerDay);
+        request.setAttribute(
+            "expertisesPerDayMorning",
+            expertisesPerDayMorning
+        );
+        request.setAttribute(
+            "expertisesPerDayAfternoon",
+            expertisesPerDayAfternoon
+        );
+        request.setAttribute("weekLocalDates", weekLocalDates);
         request.setAttribute("currentWeekAdjust", weekAdjust);
         request.setAttribute("shifts", TimeSlot.values());
         request.setAttribute("veterinarians", veterinarians);
