@@ -36,4 +36,14 @@ public class ScheduleFacade extends AbstractFacade<Schedule> {
         query.setParameter("endOfWeek", endOfWeek);
         return query.getResultList();
     }
+
+    public List<Schedule> findScheduleByVetAndDate(Long vetId, LocalDate date) {
+        TypedQuery<Schedule> query = em.createQuery(
+            "SELECT s FROM Schedule s WHERE s.veterinarian.id = :vetId AND s.date = :date",
+            Schedule.class
+        );
+        query.setParameter("vetId", vetId);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
 }

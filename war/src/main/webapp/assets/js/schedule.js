@@ -16,7 +16,7 @@ function openDialog(buttonElement) {
             <select name="timeSlot" id="timeSlotSelect">
                 <option value="MORNING" ${shift === 'MORNING' ? 'selected' : ''}>Morning</option>
                 <option value="AFTERNOON" ${shift === 'AFTERNOON' ? 'selected' : ''}>Afternoon</option>
-                <option value="ALL_DAY" ${shift === 'ALL DAY' ? 'selected' : ''}>All Day</option>
+                <option value="ALL_DAY" ${shift === 'ALL_DAY' ? 'selected' : ''}>All Day</option>
                 <option value="NOT_SCHEDULED" ${shift === 'NOT SCHEDULED' ? 'selected' : ''}>Not Scheduled</option>
             </select>
             <input type="hidden" name="vetId" value="${vetId}">
