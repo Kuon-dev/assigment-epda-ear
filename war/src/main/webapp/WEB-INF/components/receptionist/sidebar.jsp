@@ -60,7 +60,7 @@
             class="flex-none text-xl font-semibold"
             href="#"
             aria-label="Brand"
-            >Brand</a
+            >AVCS</a
           >
         </div>
 
