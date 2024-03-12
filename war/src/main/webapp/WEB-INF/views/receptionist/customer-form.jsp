@@ -35,8 +35,8 @@
     </div>
 
     <form
-      action="${pageContext.request.contextPath}/receptionist/customers/new"
-      method="POST"
+        action="${pageContext.request.contextPath}/receptionist/customers/new/"
+        method="POST"
     >
       <%-- Grid --%>
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">

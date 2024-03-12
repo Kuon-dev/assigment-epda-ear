@@ -27,6 +27,10 @@ public class PetNewController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
+        String[] pathParts = request.getRequestURI().split("/");
+        String customerIdString = pathParts[pathParts.length - 1];
+
+        request.setAttribute("customerId", customerIdString);
         request
             .getRequestDispatcher("/WEB-INF/views/receptionist/pet-form.jsp")
             .forward(request, response);
@@ -40,7 +44,7 @@ public class PetNewController extends HttpServlet {
         // get customer id from path
         String[] pathParts = request.getRequestURI().split("/");
         String customerIdString = pathParts[pathParts.length - 1];
-        int customerId = Integer.parseInt(customerIdString);
+        Long customerId = Long.parseLong(customerIdString);
 
         // get customer data
         Customer customer = customerFacade.find(customerId);

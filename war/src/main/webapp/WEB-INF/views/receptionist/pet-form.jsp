@@ -33,7 +33,7 @@
     </div>
 
     <form
-      action="${pageContext.request.contextPath}/receptionist/pets/new"
+      action="${pageContext.request.contextPath}/receptionist/pets/new/${customerId}"
       method="POST"
     >
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
