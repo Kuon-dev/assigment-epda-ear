@@ -1,4 +1,4 @@
-package com.epda.controllers;
+package com.epda.controllers.receptionist;
 
 import com.epda.config.ServletExceptionConfig;
 import com.epda.facade.PetFacade;
@@ -61,6 +61,7 @@ public class PetViewController extends HttpServlet {
 
         request.setAttribute("pets", pets);
         request.setAttribute("searchQuery", searchQuery);
+        request.setAttribute("customerId", customerId);
         request
             .getRequestDispatcher("/WEB-INF/views/receptionist/pet-table.jsp")
             .forward(request, response);

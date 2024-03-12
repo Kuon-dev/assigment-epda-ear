@@ -66,6 +66,9 @@
                   <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                     <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Age</p>
                   </th>
+                  <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                    <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Action</p>
+                  </th>
                 </tr>
               </thead>
               <tbody class="overflow-y-auto">
@@ -76,6 +79,11 @@
                     <td class="p-4 border-b border-blue-gray-50">${customer.email}</td>
                     <td class="p-4 border-b border-blue-gray-50">${customer.phone}</td>
                     <td class="p-4 border-b border-blue-gray-50">${customer.age}</td>
+                    <td class="p-4 border-b border-blue-gray-50">
+<a href="${pageContext.request.contextPath}/receptionist/pets/view/${customer.id}" class="inline-block px-6 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+  View Pets
+                            </a>
+                    </td>
                   </tr>
                 </c:forEach>
               </tbody>
