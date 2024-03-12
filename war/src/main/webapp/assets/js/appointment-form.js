@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
       clickDay(event, self) {
         if (self.selectedDates.length > 0) {
           const selectedDateStr = self.selectedDates[self.selectedDates.length - 1]; // Get the first selected date as a string
-          console.log(selectedDateStr);
+          self.selectedDates.shift();
           document.getElementById('appointmentDate').value = selectedDateStr;
         }
       },
@@ -123,9 +123,10 @@ function submitForm() {
         }).showToast();
   })
   .catch(error => {
-    console.error('There has been a problem with your fetch operation:', error);
+        console.error('There has been a problem with your fetch operation:', error);
+        const err = document.getElementById('servletException').textContent;
         Toastify({
-          text: "An error occured!",
+          text: `An error occured! ${err}`,
           duration: 3000,
           style: {
             background: "red",

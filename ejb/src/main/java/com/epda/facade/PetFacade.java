@@ -42,4 +42,13 @@ public class PetFacade extends AbstractFacade<Pet> {
         query.setParameter("customerName", "%" + customerName + "%");
         return query.getResultList();
     }
+
+    public List<Pet> findByPetName(String petName) {
+        TypedQuery<Pet> query = em.createQuery(
+            "SELECT p FROM Pet p WHERE LOWER(p.name) LIKE LOWER(:petName)",
+            Pet.class
+        );
+        query.setParameter("petName", "%" + petName + "%");
+        return query.getResultList();
+    }
 }

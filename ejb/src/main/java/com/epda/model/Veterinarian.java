@@ -34,7 +34,7 @@ public class Veterinarian extends User implements Serializable {
         joinColumns = @JoinColumn(name = "veterinarian_id")
     )
     @Column(name = "expertise")
-    @OrderColumn(name = "expertise_order") // This column ensures the list order is maintained
+    // @OrderColumn(name = "expertise_order") // This column ensures the list order is maintained
     private List<Expertise> expertises; // Renamed to plural to reflect multiple possible values
 
     public List<Appointment> getAppointments() {

@@ -44,7 +44,6 @@ public class Pet implements Serializable {
     private int age;
 
     @OneToMany(mappedBy = "pet", fetch = FetchType.LAZY)
-    // @JsonbTransient
     private List<Appointment> appointments;
 
     public Pet(String name, String type, String breed, int age) {

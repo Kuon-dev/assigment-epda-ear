@@ -5,16 +5,20 @@ import com.epda.factory.CustomerFactory;
 import com.epda.factory.ManagingStaffFactory;
 import com.epda.factory.PetFactory;
 import com.epda.factory.ReceptionistFactory;
+import com.epda.factory.ScheduleFactory;
 import com.epda.factory.VeterinarianFactory;
 import com.epda.model.Appointment;
 import com.epda.model.Customer;
 import com.epda.model.ManagingStaff;
 import com.epda.model.Pet;
 import com.epda.model.Receptionist;
+import com.epda.model.Schedule;
 import com.epda.model.Veterinarian;
+import com.epda.model.enums.TimeSlot;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,10 +31,12 @@ public class DatabaseSeeder {
     public void seedDatabase(
         int numberOfCustomers,
         int petsPerCustomer,
-        int appointmentsPerPet
+        int appointmentsPerPet,
+        int schedulesPerVet
     ) {
         // Check if the database is empty before seeding
         if (isDatabaseEmpty()) {
+            List<Veterinarian> veterinarians = new ArrayList<>();
             for (int i = 0; i < 30; i++) {
                 ManagingStaff managingStaff =
                     ManagingStaffFactory.createManagingStaff();
@@ -43,6 +49,14 @@ public class DatabaseSeeder {
                 Veterinarian veterinarian =
                     VeterinarianFactory.createVeterinarian(); // Assuming this factory exists
                 em.persist(veterinarian);
+                veterinarians.add(veterinarian); // Add to list
+            }
+
+            for (Veterinarian vet : veterinarians) {
+                for (int i = 0; i < schedulesPerVet; i++) {
+                    Schedule schedule = ScheduleFactory.create(vet); // Assuming this factory exists
+                    em.persist(schedule);
+                }
             }
 
             for (int i = 0; i < numberOfCustomers; i++) {

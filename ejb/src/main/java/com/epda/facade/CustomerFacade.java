@@ -6,6 +6,8 @@ import com.epda.model.Customer;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class CustomerFacade extends AbstractFacade<Customer> {
@@ -20,5 +22,21 @@ public class CustomerFacade extends AbstractFacade<Customer> {
 
     public CustomerFacade() {
         super(Customer.class);
+    }
+
+    public List<Customer> findByEmail(String email) {
+        // search customer by email
+        TypedQuery<Customer> query = em.createQuery(
+            "SELECT c FROM Customer c WHERE c.email LIKE :email",
+            Customer.class
+        );
+        query.setParameter("email", email + "%");
+        List<Customer> customers = query.getResultList();
+
+        if (!customers.isEmpty()) {
+            return customers; // Return the first customer found
+        } else {
+            return null; // No customer found with the given email
+        }
     }
 }

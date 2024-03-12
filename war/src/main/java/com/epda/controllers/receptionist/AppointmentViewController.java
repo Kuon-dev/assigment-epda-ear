@@ -1,4 +1,4 @@
-package com.epda.controllers;
+package com.epda.controllers.receptionist;
 
 import com.epda.facade.AppointmentFacade;
 import com.epda.model.Appointment;
@@ -58,7 +58,11 @@ public class AppointmentViewController extends HttpServlet {
             totalAppointments = appointments.size();
         } else {
             // No search query provided, fetch all appointments or appointments for the current page
-            appointments = appointmentFacade.findAll(); // Or use pagination logic if implemented
+            // appointments = appointmentFacade.findAll(); // Or use pagination logic if implemented
+            appointments = appointmentFacade.findAppointments(
+                "updatedAt",
+                "DESC"
+            );
             totalAppointments = appointmentFacade.count();
         }
         int maxPagesToShow = 5;
@@ -89,10 +93,6 @@ public class AppointmentViewController extends HttpServlet {
                     .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
             );
         });
-
-        appointments.sort(
-            Comparator.comparing(Appointment::getUpdatedAt).reversed()
-        );
         request.setAttribute("formattedDates", formattedDates);
         request.setAttribute("encodedSearchQuery", encodedSearchQuery);
 
@@ -103,7 +103,7 @@ public class AppointmentViewController extends HttpServlet {
         request.setAttribute("appointments", appointments);
         request
             .getRequestDispatcher(
-                "/WEB-INF/views/receptionist-appointment-table.jsp"
+                "/WEB-INF/views/receptionist/appointment-table.jsp"
             )
             .forward(request, response);
     }
