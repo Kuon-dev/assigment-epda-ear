@@ -33,10 +33,10 @@
         </form>
         <div>
           <a
-            href="${pageContext.request.contextPath}/receptionist/customers/add"
+            href="${pageContext.request.contextPath}/receptionist/customers/new"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-          Add Appointment
+          Add Customer
           </a>
         </div>
       </div>
