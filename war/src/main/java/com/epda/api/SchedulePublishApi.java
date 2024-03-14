@@ -113,14 +113,23 @@ public class SchedulePublishApi extends HttpServlet {
             }
         }
 
-        WorkingRota workingRota = new WorkingRota();
-        workingRota.setStartDate(startOfWeek);
-        workingRota.setEndDate(endOfWeek);
-        workingRota.setSchedules(weekSchedules);
+        WorkingRota workingRota = workingRotaFacade.findRotaByDates(
+            startOfWeek,
+            endOfWeek
+        );
+        if (workingRota == null) {
+            // If no existing rota found, create a new one
+            workingRota = new WorkingRota();
+            workingRota.setStartDate(startOfWeek);
+            workingRota.setEndDate(endOfWeek);
+        }
+        workingRota.setSchedules(weekSchedules); // Update schedules regardless of whether it's a new or existing rota
 
-        workingRotaFacade.create(workingRota);
-
-        // Implement logic to mark schedules as published if needed
+        if (workingRota.getId() == null) {
+            workingRotaFacade.create(workingRota); // Persist new WorkingRota
+        } else {
+            workingRotaFacade.edit(workingRota); // Update existing WorkingRota
+        }
 
         return "valid"; // Success message
     }

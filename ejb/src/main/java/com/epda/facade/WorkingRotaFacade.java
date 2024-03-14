@@ -46,4 +46,21 @@ public class WorkingRotaFacade extends AbstractFacade<WorkingRota> {
         query.setParameter("today", LocalDate.now());
         return query.getResultList();
     }
+
+    public WorkingRota findRotaByDates(
+        LocalDate startOfWeek,
+        LocalDate endOfWeek
+    ) {
+        TypedQuery<WorkingRota> query = em.createQuery(
+            "SELECT wr FROM WorkingRota wr WHERE wr.startDate = :startOfWeek AND wr.endDate = :endOfWeek",
+            WorkingRota.class
+        );
+        query.setParameter("startOfWeek", startOfWeek);
+        query.setParameter("endOfWeek", endOfWeek);
+        List<WorkingRota> results = query.getResultList();
+        if (!results.isEmpty()) {
+            return results.get(0); // Assuming there's at most one rota for any given start/end date pair
+        }
+        return null;
+    }
 }

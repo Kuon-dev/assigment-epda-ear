@@ -1,10 +1,6 @@
-package com.epda.controllers.staff;
+package com.epda.controllers.veterinarian;
 
-import com.epda.facade.ManagingStaffFacade;
-import com.epda.facade.ReceptionistFacade;
 import com.epda.facade.VeterinarianFacade;
-import com.epda.model.ManagingStaff;
-import com.epda.model.Receptionist;
 import com.epda.model.User;
 import com.epda.model.Veterinarian;
 import com.epda.model.enums.AccountStatus;
@@ -18,22 +14,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-@WebServlet("/managing-staff/users/edit/*")
-public class UserUpdateController extends HttpServlet {
-
-    @EJB
-    private ReceptionistFacade receptionistFacade;
+@WebServlet("/veterinarian/edit-profile")
+public class ProfileUpdateController extends HttpServlet {
 
     @EJB
     private VeterinarianFacade veterinarianFacade;
-
-    @EJB
-    private ManagingStaffFacade managingStaffFacade;
 
     @Override
     protected void doGet(
@@ -55,7 +43,7 @@ public class UserUpdateController extends HttpServlet {
         }
 
         if (userId != null) {
-            User user = findUserById(userId);
+            User user = veterinarianFacade.find(userId);
             if (user != null) {
                 request.setAttribute("user", user);
             } else {
@@ -75,7 +63,7 @@ public class UserUpdateController extends HttpServlet {
         request.setAttribute("allExpertise", Arrays.asList(Expertise.values()));
 
         request
-            .getRequestDispatcher("/WEB-INF/views/managing-staff/user-form.jsp")
+            .getRequestDispatcher("/WEB-INF/views/veterinarian/user-form.jsp")
             .forward(request, response);
     }
 
@@ -108,7 +96,7 @@ public class UserUpdateController extends HttpServlet {
             String password = request.getParameter("password"); // Ensure you hash the password in real applications
             String phone = request.getParameter("phone");
 
-            User user = findUserById(userId);
+            User user = veterinarianFacade.find(userId);
             if (user != null) {
                 user.setName(name);
                 user.setEmail(email);
@@ -116,31 +104,24 @@ public class UserUpdateController extends HttpServlet {
                 user.setPhone(phone);
                 user.setStatus(status);
                 // check if the user is a managing staff, receptionist or veterinarian, then update the user
-                if (user instanceof ManagingStaff) {
-                    managingStaffFacade.edit((ManagingStaff) user);
-                } else if (user instanceof Receptionist) {
-                    receptionistFacade.edit((Receptionist) user);
-                } else if (user instanceof Veterinarian) {
-                    String[] expertiseValues = request.getParameterValues(
-                        "expertise"
-                    );
-                    List<Expertise> selectedExpertise = new ArrayList<>();
-                    if (expertiseValues != null) {
-                        for (String expertiseValue : expertiseValues) {
-                            try {
-                                selectedExpertise.add(
-                                    Expertise.valueOf(
-                                        expertiseValue.toUpperCase()
-                                    )
-                                );
-                            } catch (IllegalArgumentException e) {
-                                // Handle the case where an invalid expertise is submitted
-                            }
+
+                String[] expertiseValues = request.getParameterValues(
+                    "expertise"
+                );
+                List<Expertise> selectedExpertise = new ArrayList<>();
+                if (expertiseValues != null) {
+                    for (String expertiseValue : expertiseValues) {
+                        try {
+                            selectedExpertise.add(
+                                Expertise.valueOf(expertiseValue.toUpperCase())
+                            );
+                        } catch (IllegalArgumentException e) {
+                            // Handle the case where an invalid expertise is submitted
                         }
-                        // Assuming Veterinarian has a method to set multiple expertise areas
-                        ((Veterinarian) user).setExpertises(selectedExpertise);
-                        veterinarianFacade.edit((Veterinarian) user);
                     }
+                    // Assuming Veterinarian has a method to set multiple expertise areas
+                    ((Veterinarian) user).setExpertises(selectedExpertise);
+                    veterinarianFacade.edit((Veterinarian) user);
 
                     veterinarianFacade.edit((Veterinarian) user);
                 }
@@ -163,19 +144,8 @@ public class UserUpdateController extends HttpServlet {
                 .setAttribute("operationMessage", "Invalid user ID or status.");
         } finally {
             response.sendRedirect(
-                request.getContextPath() + "/managing-staff/users/view"
+                request.getContextPath() + "/veterinarian/edit-profile"
             );
         }
-    }
-
-    private User findUserById(Long userId) {
-        User user = managingStaffFacade.find(userId);
-        if (user == null) {
-            user = receptionistFacade.find(userId);
-        }
-        if (user == null) {
-            user = veterinarianFacade.find(userId);
-        }
-        return user;
     }
 }
