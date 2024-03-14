@@ -29,6 +29,21 @@
           })
           .then((data) => {
             console.log(data)
+          Toastify({
+            text: "Profile updated successfully!",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: 'right', // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
+          })
+
             // Handle success here (e.g., redirect or display a success message)
           })
           .catch((error) => {
@@ -37,6 +52,19 @@
               error
             )
           })
+      Toastify({
+        text: `An error occurred: ${error.message}`,
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: 'right', // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+        },
+        onClick: function(){} // Callback after click
+      }).showToast();
       })
     }
   })

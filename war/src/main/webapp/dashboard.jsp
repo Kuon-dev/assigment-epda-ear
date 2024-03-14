@@ -1,8 +1,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
+    <title>APU Veterinary Clinic System</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js" defer></script>
+    <script src="
+      https://cdn.jsdelivr.net/npm/@tailwindcss/forms@0.5.7/src/index.min.js
+      "></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   </head>
   <body class="bg-gray-50 dark:bg-slate-900">
     <%-- ========== MAIN CONTENT ========== --%>
@@ -102,7 +109,7 @@
           <li>
             <a
               class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-900 dark:text-slate-400 dark:hover:text-slate-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-              href="/receptionist/appointments/view/1"
+              href="//appointments/view/1"
             >
               Appointments
             </a>

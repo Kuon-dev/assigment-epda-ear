@@ -5,26 +5,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Weekly Schedule</title>
+    <title>APU Veterinary Clinic System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 </head>
-<body>
-
+<body class="bg-gray-50">
+<jsp:include page="/WEB-INF/components/managing-staff/sidebar.jsp" />
+<div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
 <div class="bg-white shadow-md rounded-lg overflow-hidden">
     <h1 class="text-xl font-semibold text-gray-800 p-5">Weekly Veterinarian Schedule</h1>
     <div id="week-navigation" class="flex justify-between items-center bg-blue-100 p-4">
         <% int currentWeekAdjust = (Integer)request.getAttribute("currentWeekAdjust"); %>
-        <a href="ScheduleController?weekAdjust=<%=currentWeekAdjust - 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
+        <a href="/managing-staff/schedules/view?weekAdjust=<%=currentWeekAdjust - 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
             Previous Week
         </a>
         <span id="weekLabel" class="text-lg font-medium text-gray-700">
             <fmt:formatDate value="${startOfWeek}" pattern="yyyy-MM-dd" /> - 
             <fmt:formatDate value="${endOfWeek}" pattern="yyyy-MM-dd" />
         </span>
-        <a href="ScheduleController?weekAdjust=<%=currentWeekAdjust + 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
+        <a href="/managing-staff/schedules/view?weekAdjust=<%=currentWeekAdjust + 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
             Next Week
         </a>
     </div>
@@ -55,10 +56,9 @@
     <div class="flex flex-col space-y-2">
         <div class="flex justify-between">
             <div class="flex-1">
-                <h3 class="font-bold text-sm">Morning</h3>
                 
             <ul class="list-disc pl-5">
-              <h3>Morning</h3>
+                <h3 class="font-bold text-sm">Morning</h3>
               <c:forEach items="${expertisesPerDayMorning[date]}" var="expertise">
                 <li>${expertise}</li>
               </c:forEach>
@@ -66,9 +66,8 @@
 
             </div>
             <div class="flex-1">
-                <h3 class="font-bold text-sm">Afternoon</h3>
             <ul class="list-disc pl-5">
-              <h3>Afternoon</h3>
+                <h3 class="font-bold text-sm">Afternoon</h3>
               <c:forEach items="${expertisesPerDayAfternoon[date]}" var="expertise">
                 <li>${expertise}</li>
               </c:forEach>
@@ -146,6 +145,8 @@
   </div>
 </div>  
 
+
+</div>
 <script src="${pageContext.request.contextPath}/assets/js/schedule.js"></script>
 </body>
 </html>

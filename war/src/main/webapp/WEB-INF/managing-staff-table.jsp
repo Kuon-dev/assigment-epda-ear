@@ -38,8 +38,8 @@
                 <td class="border px-4 py-2">${user.name}</td>
                 <td class="border px-4 py-2">${user.email}</td>
                 <td class="border px-4 py-2">${user.phone}</td>
-                <td class="border px-4 py-2"><fmt:formatDate value="${user.createdAt}" pattern="dd/MM/yyyy HH:mm"/></td>
-                <td class="border px-4 py-2"><fmt:formatDate value="${user.updatedAt}" pattern="dd/MM/yyyy HH:mm"/></td>
+                <td class="border px-4 py-2"><fmt:formatDate value="${user.createdAt}" pattern="dd/MM/yyyy"/></td>
+                <td class="border px-4 py-2"><fmt:formatDate value="${user.updatedAt}" pattern="dd/MM/yyyy"/></td>
             </tr>
         </c:forEach>
         </tbody>

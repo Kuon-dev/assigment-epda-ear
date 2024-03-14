@@ -16,7 +16,7 @@ public class VeterinarianFactory {
         Veterinarian veterinarian = new Veterinarian();
         UserFactory.populateUserFields(veterinarian);
 
-        List<Expertise> expertises = generateRandomExpertises(1, 5); // Each vet has 1 to 5 areas of expertise
+        List<Expertise> expertises = generateRandomExpertises(1, 2); // Each vet has 1 to 5 areas of expertise
         veterinarian.setExpertises(expertises);
 
         return veterinarian;

@@ -11,7 +11,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 
 @Stateless
-public class AuthService {
+public class UserService {
 
     @PersistenceContext(unitName = "epda")
     private EntityManager em;
@@ -62,5 +62,23 @@ public class AuthService {
 
     private boolean checkPassword(String rawPassword, String storedPassword) {
         return rawPassword.equals(storedPassword);
+    }
+
+    public User findUserById(Long userId) {
+        User user = null;
+        user = find(userId, ManagingStaff.class);
+        if (user != null) return user;
+
+        user = find(userId, Receptionist.class);
+        if (user != null) return user;
+
+        user = find(userId, Veterinarian.class);
+        if (user != null) return user;
+
+        return null;
+    }
+
+    private <T extends User> T find(Long userId, Class<T> userClass) {
+        return em.find(userClass, userId);
     }
 }
