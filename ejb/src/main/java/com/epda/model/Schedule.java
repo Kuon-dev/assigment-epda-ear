@@ -29,8 +29,9 @@ public class Schedule implements Serializable {
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
 
+    // can be null
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vet_id", referencedColumnName = "id")
+    @JoinColumn(name = "vet_id", referencedColumnName = "id", nullable = true)
     private Veterinarian veterinarian;
 
     @Column(name = "date")
@@ -56,6 +57,11 @@ public class Schedule implements Serializable {
     protected void onUpdate() {
         updatedAt = new Date();
     }
+
+    // schedule is linked to working rota
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rota_id", referencedColumnName = "id", nullable = true)
+    private WorkingRota workingRota;
 
     // Constructors, getters, and setters
 
@@ -97,5 +103,9 @@ public class Schedule implements Serializable {
 
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public WorkingRota getWorkingRota() {
+        return workingRota;
     }
 }

@@ -16,14 +16,22 @@
 <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
 <div class="bg-white shadow-md rounded-lg overflow-hidden">
     <h1 class="text-xl font-semibold text-gray-800 p-5">Weekly Veterinarian Schedule</h1>
+    <button id="scheduleBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-5">
+      Publish Schedule
+    </button>
     <div id="week-navigation" class="flex justify-between items-center bg-blue-100 p-4">
         <% int currentWeekAdjust = (Integer)request.getAttribute("currentWeekAdjust"); %>
         <a href="/managing-staff/schedules/view?weekAdjust=<%=currentWeekAdjust - 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
             Previous Week
         </a>
         <span id="weekLabel" class="text-lg font-medium text-gray-700">
-            <fmt:formatDate value="${startOfWeek}" pattern="yyyy-MM-dd" /> - 
+            <span id="startOfWeek">
+            <fmt:formatDate value="${startOfWeek}" pattern="yyyy-MM-dd" /> 
+            </span>
+            - 
+            <span id="endOfWeek">
             <fmt:formatDate value="${endOfWeek}" pattern="yyyy-MM-dd" />
+            </span>
         </span>
         <a href="/managing-staff/schedules/view?weekAdjust=<%=currentWeekAdjust + 1%>" class="text-blue-600 hover:text-blue-800 transition duration-300 ease-in-out">
             Next Week

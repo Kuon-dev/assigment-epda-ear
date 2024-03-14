@@ -30,8 +30,6 @@ public class AuthService {
         user = authenticate(email, password, Veterinarian.class);
         if (user != null) return user;
 
-        // Extend with other roles as necessary
-
         return null; // Authentication failed
     }
 

@@ -8,7 +8,7 @@
         <jta-data-source>jdbc/epdaDS</jta-data-source>
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-          <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
+          <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
           <property name="eclipselink.deploy-on-startup" value="true" />
           <property name="eclipselink.logging.level" value="FINE"/>
         </properties>

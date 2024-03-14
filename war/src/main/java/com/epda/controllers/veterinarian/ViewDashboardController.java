@@ -1,4 +1,4 @@
-package com.epda.controllers;
+package com.epda.controllers.veterinarian;
 
 import com.epda.facade.VeterinarianFacade;
 import com.epda.model.User;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 @WebServlet("/veterinarian/edit-profile")
-public class VeterinarianController extends HttpServlet {
+public class ViewDashboardController extends HttpServlet {
 
     @EJB
     private VeterinarianFacade veterinarianFacade;
@@ -24,7 +24,6 @@ public class VeterinarianController extends HttpServlet {
         HttpServletResponse response
     ) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        // Assuming the user ID is available in the session or passed as a parameter
         User user = (User) session.getAttribute("user");
         List<Veterinarian> users = veterinarianFacade.findAll();
         if (user == null) {
@@ -40,7 +39,7 @@ public class VeterinarianController extends HttpServlet {
         }
         request.setAttribute("user", user);
         request
-            .getRequestDispatcher("/veterinarian-dashboard.jsp")
+            .getRequestDispatcher("/WEB-INF/views/veterinarian/dashboard.jsp")
             .forward(request, response);
     }
 }

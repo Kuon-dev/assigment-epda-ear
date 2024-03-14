@@ -97,6 +97,7 @@ public class ScheduleViewController extends HttpServlet {
             Veterinarian vet = schedule.getVeterinarian(); // Ensure Schedule entity has getVeterinarian()
             TimeSlot shift = schedule.getShift(); // Ensure Schedule entity has getShift()
 
+            if (vet == null) return;
             vet
                 .getExpertises()
                 .forEach(expertise -> {

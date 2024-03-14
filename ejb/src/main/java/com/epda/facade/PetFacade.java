@@ -51,4 +51,11 @@ public class PetFacade extends AbstractFacade<Pet> {
         query.setParameter("petName", "%" + petName + "%");
         return query.getResultList();
     }
+
+    public List<Object[]> findPetTypeDistribution() {
+        String sql =
+            "SELECT p.type, COUNT(p.id) FROM Pet p GROUP BY p.type ORDER BY COUNT(p.id) DESC";
+        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+        return results;
+    }
 }
