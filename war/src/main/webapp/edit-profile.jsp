@@ -82,7 +82,7 @@
     </div>
 
     <form
-      action="${pageContext.request.contextPath}/api/${userRole}/${user.id}"
+        action="#"
     >
       <%-- Grid --%>
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">

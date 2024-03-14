@@ -11,13 +11,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@WebServlet("/veterinarian/edit-profile")
+@WebServlet("/veterinarian/edit-profile/*")
 public class ProfileUpdateController extends HttpServlet {
 
     @EJB
@@ -28,38 +29,21 @@ public class ProfileUpdateController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
-        Long userId = null;
-        String pathInfo = request.getPathInfo();
-
-        if (pathInfo != null && !pathInfo.isEmpty()) {
-            String[] splits = pathInfo.split("/");
-            if (splits.length > 1) {
-                try {
-                    userId = Long.parseLong(splits[1]);
-                } catch (NumberFormatException e) {
-                    // Handle incorrect format gracefully, perhaps redirect to a default page or log
-                }
+        HttpSession session = request.getSession(false);
+        User user = (User) session.getAttribute("user");
+        List<Veterinarian> users = veterinarianFacade.findAll();
+        for (Veterinarian u : users) {
+            if (u.getId() == user.getId()) {
+                user = u;
+                break;
             }
         }
 
-        if (userId != null) {
-            User user = veterinarianFacade.find(userId);
-            if (user != null) {
-                request.setAttribute("user", user);
-            } else {
-                request.setAttribute("errorMessage", "User not found.");
-            }
-        } else {
-            request.setAttribute("errorMessage", "Invalid user ID.");
+        if (user == null) {
+            response.sendRedirect("/login");
+            return;
         }
-
-        request.setAttribute(
-            "allStatuses",
-            Arrays.stream(AccountStatus.values())
-                .filter(status -> status != AccountStatus.INACTIVE)
-                .collect(Collectors.toList())
-        );
-
+        request.setAttribute("user", user);
         request.setAttribute("allExpertise", Arrays.asList(Expertise.values()));
 
         request
@@ -87,10 +71,6 @@ public class ProfileUpdateController extends HttpServlet {
                 }
             }
 
-            String statusStr = request.getParameter("status");
-            AccountStatus status = AccountStatus.valueOf(
-                statusStr.toUpperCase()
-            );
             String name = request.getParameter("name");
             String email = request.getParameter("email");
             String password = request.getParameter("password"); // Ensure you hash the password in real applications
@@ -102,7 +82,6 @@ public class ProfileUpdateController extends HttpServlet {
                 user.setEmail(email);
                 user.setPassword(password); // Remember to hash passwords in real applications
                 user.setPhone(phone);
-                user.setStatus(status);
                 // check if the user is a managing staff, receptionist or veterinarian, then update the user
 
                 String[] expertiseValues = request.getParameterValues(
@@ -122,26 +101,24 @@ public class ProfileUpdateController extends HttpServlet {
                     // Assuming Veterinarian has a method to set multiple expertise areas
                     ((Veterinarian) user).setExpertises(selectedExpertise);
                     veterinarianFacade.edit((Veterinarian) user);
-
-                    veterinarianFacade.edit((Veterinarian) user);
                 }
 
                 // Redirect to avoid double posting
                 request
                     .getSession()
                     .setAttribute(
-                        "operationMessage",
+                        "successMessage",
                         "User status updated successfully."
                     );
             } else {
                 request
                     .getSession()
-                    .setAttribute("operationMessage", "User not found.");
+                    .setAttribute("errorMessage", "User not found.");
             }
         } catch (IllegalArgumentException e) {
             request
                 .getSession()
-                .setAttribute("operationMessage", "Invalid user ID or status.");
+                .setAttribute("errorMessage", "Invalid user ID or status.");
         } finally {
             response.sendRedirect(
                 request.getContextPath() + "/veterinarian/edit-profile"

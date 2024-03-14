@@ -1,4 +1,4 @@
-package com.epda.controllers.receptionist;
+package com.epda.controllers.veterinarian;
 
 import com.epda.facade.AppointmentFacade;
 import com.epda.facade.PetFacade;
@@ -18,9 +18,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
-@WebServlet("/receptionist/appointments/edit/*")
+@WebServlet("/veterinarian/appointments/edit/*")
 public class AppointmentEditController extends HttpServlet {
 
     @EJB
@@ -83,6 +87,7 @@ public class AppointmentEditController extends HttpServlet {
                 .getAppointmentDate()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             request.setAttribute("appointmentDate", formattedDate);
+
             // Handling veterinarian information
             Veterinarian currentVet = appointment.getVeterinarian();
             List<Veterinarian> vetList = veterinarianFacade.findByExpertise(
@@ -107,7 +112,7 @@ public class AppointmentEditController extends HttpServlet {
             // Forwarding to the JSP
             request
                 .getRequestDispatcher(
-                    "/WEB-INF/views/receptionist/appointment-form.jsp"
+                    "/WEB-INF/views/veterinarian/appointment-form.jsp"
                 )
                 .forward(request, response);
         } catch (NumberFormatException e) {

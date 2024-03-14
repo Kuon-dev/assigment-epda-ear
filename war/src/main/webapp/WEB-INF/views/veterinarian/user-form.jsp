@@ -17,7 +17,7 @@
   </head>
   <body class="bg-gray-50">
     <div color="" id="servletException"></div>
-    <jsp:include page="/WEB-INF/components/managing-staff/sidebar.jsp" />
+    <jsp:include page="/WEB-INF/components/veterinarian/sidebar.jsp" />
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
       <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
         <c:if test="${not empty errorMessage}">
@@ -25,8 +25,11 @@
             ${errorMessage}
           </div>
         </c:if>
-        <%-- back button --%> 
-         <a href="${pageContext.request.contextPath}/managing-staff/users/1" class="text-blue-600 hover:underline">Back</a> 
+        <c:if test="${not empty successMessage}">
+          <div class="text-emerald-500">
+            ${successMessage}
+          </div>
+        </c:if>
         <%-- Card --%>
         <div class="rounded-xl shadow p-4 sm:p-7">
           <div class="mb-8">
@@ -38,7 +41,7 @@
             </p>
           </div>
           <form
-            action="${pageContext.request.contextPath}/managing-staff/users/edit/${user.id}"
+            action="${pageContext.request.contextPath}/veterinarian/edit-profile/${user.id}"
             method="post"
             >
             <%-- Grid --%>
@@ -134,28 +137,7 @@
                     />
                 </div>
               </div>
-              <div class="sm:col-span-3">
-                <div class="inline-block">
-                  <label
-                    for="af-account-status"
-                    class="inline-block text-sm text-gray-800 mt-2.5 "
-                    >
-                  Account Status
-                  </label>
-                </div>
-              </div>
-              <%-- End Col --%>
-              <div class="sm:col-span-9">
-                <div class="sm:flex">
-                  <select name="status" id="status">
-                    <c:forEach items="${allStatuses}" var="status">
-                      <option value="${status}" ${user.status == status ? 'selected' : ''}>${status}</option>
-                    </c:forEach>
-                  </select>
-                  <input type="hidden" name="userId" value="${user.id}"/>
-                </div>
-              </div>
-            </div>
+
             <%-- Expertise dropdown for Veterinarians --%>
             <c:if test="${user.getClass().getSimpleName() == 'Veterinarian'}">
               <div class="sm:col-span-3">
@@ -177,7 +159,8 @@
               </div>
             </c:if>
             <%-- End Grid --%>
-            <div class="mt-5 flex justify-end gap-x-2">
+            </div>
+            <div class="mt-5 flex justify-start gap-x-2">
               <button
                 type="button"
                 class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none "
