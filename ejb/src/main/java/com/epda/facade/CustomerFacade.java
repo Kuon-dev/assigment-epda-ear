@@ -39,4 +39,20 @@ public class CustomerFacade extends AbstractFacade<Customer> {
             return null; // No customer found with the given email
         }
     }
+
+    public List<Object[]> findCustomerAgeDistribution() {
+        // Example SQL, adjust based on actual age groups you want to use
+        String sql =
+            "SELECT CASE " +
+            "WHEN age BETWEEN 0 AND 18 THEN '0-18' " +
+            "WHEN age BETWEEN 19 AND 30 THEN '19-30' " +
+            "WHEN age BETWEEN 31 AND 45 THEN '31-45' " +
+            "WHEN age > 45 THEN '46+' " +
+            "END AS ageGroup, COUNT(id) " +
+            "FROM Customer " +
+            "GROUP BY ageGroup " +
+            "ORDER BY ageGroup";
+        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+        return results;
+    }
 }

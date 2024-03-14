@@ -42,4 +42,11 @@ public class VeterinarianFacade extends AbstractFacade<Veterinarian> {
         query.setParameter("expertise", expertise); // Pass the enum here
         return query.getResultList();
     }
+
+    public List<Object[]> findVeterinarianExpertiseDistribution() {
+        String sql =
+            "SELECT ve.expertise, COUNT(ve.veterinarian_id) FROM veterinarian_expertise ve GROUP BY ve.expertise ORDER BY COUNT(ve.veterinarian_id) DESC";
+        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+        return results;
+    }
 }

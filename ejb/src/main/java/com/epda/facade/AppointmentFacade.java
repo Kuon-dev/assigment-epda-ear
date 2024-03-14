@@ -76,4 +76,21 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
 
         return getEntityManager().createQuery(cq).getResultList();
     }
+
+    public List<Object[]> findAppointmentStatusDistribution() {
+        String sql =
+            "SELECT a.status, COUNT(a.id) FROM Appointment a GROUP BY a.status ORDER BY COUNT(a.id) DESC";
+        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+        return results;
+    }
+
+    public List<Object[]> findMonthlyAppointmentTrends() {
+        String sql =
+            "SELECT EXTRACT(YEAR FROM a.appointment_date) AS year, EXTRACT(MONTH FROM a.appointment_date) AS month, COUNT(a.id) " +
+            "FROM Appointment a " +
+            "GROUP BY EXTRACT(YEAR FROM a.appointment_date), EXTRACT(MONTH FROM a.appointment_date) " +
+            "ORDER BY EXTRACT(YEAR FROM a.appointment_date), EXTRACT(MONTH FROM a.appointment_date)";
+        List<Object[]> results = em.createNativeQuery(sql).getResultList();
+        return results;
+    }
 }

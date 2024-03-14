@@ -110,6 +110,14 @@
             <li>
               <a
                 class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100slate-400slate-300s:outline-nones:ring-1s:ring-gray-600"
+                href="/managing-staff/report/view"
+              >
+              Report</a>
+
+            </li>
+            <li>
+              <a
+                class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100slate-400slate-300s:outline-nones:ring-1s:ring-gray-600"
                 href="/logout"
               >
                 Logout
