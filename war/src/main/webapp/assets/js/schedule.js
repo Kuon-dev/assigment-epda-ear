@@ -21,7 +21,6 @@ function openDialog(buttonElement) {
             </select>
             <input type="hidden" name="vet_id" value="${vetId}">
             <input type="hidden" name="date" value="${date}">
-            <button type="submit">Update</button>
         </form>
     `;
 }

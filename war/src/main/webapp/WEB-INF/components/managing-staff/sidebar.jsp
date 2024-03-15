@@ -55,7 +55,7 @@
         <div class="px-6">
           <a
             class="flex-none text-xl font-semibold"
-            href="#"
+            href="/managing-staff/edit-profile"
             aria-label="Brand"
             >AVCS</a
           >
@@ -69,7 +69,7 @@
             <li>
               <a
                 class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-slate-700 rounded-lg hover:bg-gray-100s:outline-nones:ring-1s:ring-gray-600"
-                href="managing-staff/edit-profile"
+                href="/managing-staff/edit-profile"
               >
                 Dashboard
               </a>

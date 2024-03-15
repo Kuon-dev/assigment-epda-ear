@@ -26,7 +26,7 @@
           </div>
         </c:if>
         <%-- back button --%> 
-         <a href="${pageContext.request.contextPath}/managing-staff/users/1" class="text-blue-600 hover:underline">Back</a> 
+         <a href="${pageContext.request.contextPath}/managing-staff/users/view/1" class="text-blue-600 hover:underline">Back</a> 
         <%-- Card --%>
         <div class="rounded-xl shadow p-4 sm:p-7">
           <div class="mb-8">

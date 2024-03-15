@@ -4,7 +4,7 @@ import com.epda.model.Appointment;
 import com.epda.model.Customer;
 import com.epda.model.Pet;
 // import com.epda.model.AbstractFacade;
-// import com.epda.model.User;
+import com.epda.model.Veterinarian;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,6 +14,9 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Stateless
@@ -92,5 +95,36 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
             "ORDER BY EXTRACT(YEAR FROM a.appointment_date), EXTRACT(MONTH FROM a.appointment_date)";
         List<Object[]> results = em.createNativeQuery(sql).getResultList();
         return results;
+    }
+
+    public List<Appointment> findAppointmentsForVeterinarianAndDateRange(
+        Long vetId,
+        LocalDate startDate,
+        LocalDate endDate
+    ) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Appointment> cq = cb.createQuery(Appointment.class);
+        Root<Appointment> appointmentRoot = cq.from(Appointment.class);
+
+        // Assuming an Appointment directly references a Veterinarian (adjust if through another entity)
+        Join<Appointment, Veterinarian> vetJoin = appointmentRoot.join(
+            "veterinarian"
+        );
+        // Convert LocalDate to LocalDateTime at the start and end of day
+        LocalDateTime startDateTime = startDate.atStartOfDay(); // 00:00:00 of startDate
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX); // 23:59:59.999999999 of endDate
+        // Constructing the date range and veterinarian ID criteria
+        Predicate vetPredicate = cb.equal(vetJoin.get("id"), vetId);
+        Predicate dateRangePredicate = cb.between(
+            appointmentRoot.get("appointmentDate"),
+            startDateTime,
+            endDateTime
+        );
+
+        // Combine predicates with AND
+        cq.where(cb.and(vetPredicate, dateRangePredicate));
+        cq.select(appointmentRoot);
+
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

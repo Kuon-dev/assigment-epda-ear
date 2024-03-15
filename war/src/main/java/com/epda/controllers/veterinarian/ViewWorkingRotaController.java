@@ -1,8 +1,10 @@
 package com.epda.controllers.veterinarian;
 
+import com.epda.facade.AppointmentFacade;
 import com.epda.facade.ScheduleFacade;
 import com.epda.facade.VeterinarianFacade;
 import com.epda.facade.WorkingRotaFacade;
+import com.epda.model.Appointment;
 import com.epda.model.Schedule;
 import com.epda.model.User;
 import com.epda.model.Veterinarian;
@@ -33,6 +35,9 @@ public class ViewWorkingRotaController extends HttpServlet {
 
     @EJB
     private ScheduleFacade scheduleFacade;
+
+    @EJB
+    private AppointmentFacade appointmentFacade;
 
     @Override
     protected void doGet(

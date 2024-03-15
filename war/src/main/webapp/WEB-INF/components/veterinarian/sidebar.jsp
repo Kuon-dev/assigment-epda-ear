@@ -77,15 +77,6 @@
             <li>
               <a
                 class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100slate-400slate-300s:outline-nones:ring-1s:ring-gray-600"
-                href="/veterinarian/appointments/view/1"
-              >
-                Appointments
-              </a>
-
-            </li>
-            <li>
-              <a
-                class="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-slate-700 rounded-lg hover:bg-gray-100slate-400slate-300s:outline-nones:ring-1s:ring-gray-600"
                 href="/veterinarian/weekly-rota"
               >
                 View Working Schedule 

@@ -11,26 +11,13 @@
   <body class="bg-gray-50">
     <jsp:include page="/WEB-INF/components/veterinarian/sidebar.jsp" />
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
-      <div class="container mx-auto mt-5">
-        <form
-          action="${pageContext.request.contextPath}/receiptionist/appointments/view/"
-          method="get"
-          class="mb-4"
-          >
-          <input
-            type="text"
-            name="search"
-            placeholder="Search by customer name"
-            class="border-2 border-gray-200 rounded-lg p-2 mr-2"
-            value="${fn:escapeXml(param.search)}"
-            />
-          <button
-            type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-          Search
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold">Dashboard</h1>
+        <div class="flex items-center space-x-4">
+          <button onclick="window.history.back()" class="inline-block px-6 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
+            Back
           </button>
-        </form>
+        </div>
       </div>
       <div class="container mx-auto mt-10">
         <h1 class="text-xl font-bold mb-5">Appointments</h1>
@@ -94,57 +81,10 @@
           </c:when>
           <c:otherwise>
             <div class="text-center py-10">
-              <p class="text-lg font-semibold">No appointments found.</p>
-              <p>
-                Use the search form above to find specific appointments or adjust
-                your criteria.
-              </p>
+              <p class="text-lg font-semibold">No appointments found for the week</p>
             </div>
           </c:otherwise>
         </c:choose>
-        <c:if test="${empty param.search}">
-          <div class="flex items-center justify-center gap-4 mt-5">
-            <!-- Previous Button -->
-            <c:choose>
-              <c:when test="${currentPage > 1}">
-                <a href="${pageContext.request.contextPath}/veterinarian/appointments/view/${currentPage - 1}" class="flex items-center gap-2 px-6 py-3 ...">
-                  <!-- SVG for Previous -->
-                  Previous
-                </a>
-              </c:when>
-              <c:otherwise>
-                <button disabled class="flex items-center gap-2 px-6 py-3 ..." type="button">
-                  <!-- SVG for Previous -->
-                  Previous
-                </button>
-              </c:otherwise>
-            </c:choose>
-            <!-- Page Number Buttons -->
-            <div class="flex items-center gap-2">
-              <c:forEach begin="${startPage}" end="${endPage}" var="i">
-                <a href="${pageContext.request.contextPath}/veterinarian/appointments/view/${i}${not empty param.search ? '?search=' + fn:escapeXml(param.search) : ''}" class="relative h-10 w-10 ... ${currentPage == i ? 'bg-gray-900 text-white' : 'text-gray-900'}">
-                <span class="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">${i}</span>
-                </a>
-              </c:forEach>
-            </div>
-            <!-- Next Button -->
-            <c:choose>
-              <c:when test="${currentPage < totalPages}">
-                <a href="${pageContext.request.contextPath}/veterinarian/appointments/view/${currentPage + 1}" class="flex items-center gap-2 px-6 py-3 ...">
-                  <!-- SVG for Next -->
-                  Next
-                </a>
-              </c:when>
-              <c:otherwise>
-                <button disabled class="flex items-center gap-2 px-6 py-3 ..." type="button">
-                  <!-- SVG for Next -->
-                  Next
-                </button>
-              </c:otherwise>
-            </c:choose>
-          </div>
-      </div>
-      </c:if>
     </div>
     </div>
   </body>

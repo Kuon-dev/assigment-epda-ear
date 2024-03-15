@@ -21,25 +21,6 @@
         </a>
       </div>
       <div class="container mx-auto mt-5">
-        <form
-          action="${pageContext.request.contextPath}/receptionist/pets/view/"
-          method="get"
-          class="mb-4"
-          >
-          <input
-            type="text"
-            name="search"
-            placeholder="Search by customer name"
-            class="border-2 border-gray-200 rounded-lg p-2 mr-2"
-            value="${fn:escapeXml(param.search)}"
-            />
-          <button
-            type="submit"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-          Search
-          </button>
-        </form>
         <div>
           <a
               href="${pageContext.request.contextPath}/receptionist/pets/new/${customerId}"

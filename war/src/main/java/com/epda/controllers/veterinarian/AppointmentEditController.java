@@ -101,7 +101,11 @@ public class AppointmentEditController extends HttpServlet {
             }
 
             // Setting additional attributes
-            request.setAttribute("timeSlots", TimeSlot.values());
+            List<TimeSlot> timeSlots = new ArrayList<>(
+                Arrays.asList(TimeSlot.values())
+            );
+            timeSlots.remove(TimeSlot.ALL_DAY);
+            request.setAttribute("timeSlots", timeSlots);
             request.setAttribute(
                 "appointmentStatuses",
                 AppointmentStatus.values()
