@@ -21,9 +21,23 @@ public abstract class AbstractFacade<T> {
 
     protected abstract EntityManager getEntityManager();
 
-    public void create(T entity) {
-        getEntityManager().persist(entity);
-        logOperation("CREATE", entity);
+    public <T> void create(T entity) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(entity);
+            em.flush(); // This forces the persist to occur and the ID to be generated.
+            em.refresh(entity); // This refetches the entity from the database, ensuring you have the generated ID and all defaults set by the database.
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+            throw new RuntimeException(
+                "Failed to persist entity: " + e.getMessage(),
+                e
+            );
+        } finally {
+            em.close();
+        }
     }
 
     public void edit(T entity) {

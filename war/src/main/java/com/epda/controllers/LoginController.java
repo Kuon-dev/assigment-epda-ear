@@ -28,7 +28,7 @@ public class LoginController extends HttpServlet {
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
-        // This could be used to show the login form
+        request.setAttribute("authError", request.getParameter("error"));
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
@@ -51,8 +51,9 @@ public class LoginController extends HttpServlet {
             String redirectUrl = getRoleBasedRedirectUrl(user, request);
             response.sendRedirect(redirectUrl);
         } else {
-            // Authentication failed, redirect to login with an error message
-            response.sendRedirect("login.jsp?error=true"); // Adjust as needed
+            // Authentication failed, redirect to login page with error
+            request.setAttribute("authError", "Invalid email or password");
+            response.sendRedirect("login.jsp?error=Invalid email or password"); // Adjust as needed
         }
     }
 

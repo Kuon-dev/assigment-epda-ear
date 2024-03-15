@@ -19,6 +19,10 @@
     <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <div class="rounded-xl shadow p-4 sm:p-7">
+    <div class="mt-6">
+    <button onclick="window.history.back()" class="text-blue-600 hover:underline dark:text-blue-400">Back</button>
+    </div>
+
     <div class="mb-8">
       <h2 class="text-xl font-bold text-gray-800">
         New Pet Profile
@@ -60,14 +64,11 @@
           </label>
         </div>
         <div class="sm:col-span-9">
-          <input
-            id="petType"
-            name="type"
-            type="text"
-            class="py-2 px-3 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500"
-            placeholder="Type of the pet"
-            required
-          />
+  <select id="petType" name="petType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+    <c:forEach items="${allExpertise}" var="expertise">
+        <option value="${expertise}" ${pet.expertise == expertise ? 'selected' : ''}>${expertise.name().replace('_', ' ')}</option>
+    </c:forEach>
+</select>
         </div>
 
         <div class="sm:col-span-3">

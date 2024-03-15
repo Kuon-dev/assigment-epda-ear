@@ -22,7 +22,13 @@
       <div class="container mx-auto mt-5">
         <h2 class="text-xl font-semibold mb-4">Schedule Appointment</h2>
         <%-- back button --%>
-        <a href="${pageContext.request.contextPath}/veterinarian/appointments/view/1" class="text-blue-500 hover:underline mb-4 block">Back to Appointments</a>
+        <button 
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onclick="window.history.back();"
+        >
+          <span>Back</span>
+        </button>
+
         <form id="appointmentForm">
           <input type="hidden" name="petId" value="${pet.getId()}" />
           <input type="hidden" name="customerId" value="${customer.getId()}" />

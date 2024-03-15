@@ -11,6 +11,11 @@
 <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <div class="mx-auto max-w-2xl">
     <div class="text-center">
+    <!-- back -->
+    <div class="mt-6">
+    <button onclick="window.history.back()" class="text-blue-600 hover:underline dark:text-blue-400">Back</button>
+    </div>
+
       <h2 class="text-xl text-gray-800 font-bold sm:text-3xl dark:text-white">
         Edit Pet Information
       </h2>
@@ -30,13 +35,11 @@
 <div class="mb-4 sm:mb-8">
   <label for="type" class="block mb-2 text-sm font-medium dark:text-white">Type</label>
   <div class="relative h-10 w-72 min-w-[200px]">
-    <select id="type" name="type" class="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-gray-900 focus:border-2 focus:border-gray-900 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50">
-      <option value="Dog" ${pet.type == 'Dog' ? 'selected' : ''}>Dog</option>
-      <option value="Cat" ${pet.type == 'Cat' ? 'selected' : ''}>Cat</option>
-      <option value="Bird" ${pet.type == 'Bird' ? 'selected' : ''}>Bird</option>
-      <option value="Rabbit" ${pet.type == 'Rabbit' ? 'selected' : ''}>Rabbit</option>
-      <option value="Fish" ${pet.type == 'Fish' ? 'selected' : ''}>Fish</option>
-    </select>
+<select id="expertise" name="expertise" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+    <c:forEach items="${allExpertise}" var="expertise">
+        <option value="${expertise}" ${pet.type == expertise ? 'selected' : ''}>${expertise.name().replace('_', ' ')}</option>
+    </c:forEach>
+</select>
   </div>
 </div>
 

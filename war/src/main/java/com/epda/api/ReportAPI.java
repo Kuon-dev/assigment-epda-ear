@@ -72,6 +72,7 @@ public class ReportAPI extends HttpServlet {
     ) throws IOException {
         List<Object[]> appointmentStatusDistribution =
             appointmentFacade.findAppointmentStatusDistribution();
+
         Jsonb jsonb = JsonbBuilder.create();
         String result = jsonb.toJson(appointmentStatusDistribution);
 

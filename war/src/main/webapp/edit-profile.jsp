@@ -42,7 +42,6 @@
             },
             onClick: function(){} // Callback after click
           }).showToast();
-          })
 
             // Handle success here (e.g., redirect or display a success message)
           })
@@ -51,7 +50,6 @@
               'There has been a problem with your fetch operation:',
               error
             )
-          })
       Toastify({
         text: `An error occurred: ${error.message}`,
         duration: 3000,
@@ -65,9 +63,11 @@
         },
         onClick: function(){} // Callback after click
       }).showToast();
-      })
-    }
+
+    })
   })
+  }
+})
 </script>
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <%-- Card --%>
@@ -82,7 +82,8 @@
     </div>
 
     <form
-        action="#"
+      action="${pageContext.request.contextPath}/api/${userRole}/${user.id}"
+      method="PUT"
     >
       <%-- Grid --%>
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">
