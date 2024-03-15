@@ -1,5 +1,8 @@
 package com.epda.middleware;
 
+import com.epda.model.User;
+import com.epda.services.AuthService;
+import jakarta.ejb.EJB;
 import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.FilterConfig;
@@ -14,6 +17,9 @@ import java.io.IOException;
 
 @WebFilter("/*") // Apply this filter to all requests
 public class RouterGuard implements Filter {
+
+    @EJB
+    private AuthService authService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -51,30 +57,45 @@ public class RouterGuard implements Filter {
                 );
                 return; // Important to return here to prevent further filter processing
             } else {
-                // Assuming the user object has a getStatus() method to check the user's status
-                Object user = session.getAttribute("user");
-                // You'll need to adjust this to match how you can retrieve the status from your user object
-                String status = extractUserStatus(user); // Implement this method based on your user object
+                // Assuming the user object is stored and has a getId() method
+                User user = (User) session.getAttribute("user");
+                Long userId = user.getId();
+                Class<? extends User> userType = user.getClass();
 
-                // Redirect to a pending page if the status is not approved
-                if (!"approved".equalsIgnoreCase(status)) {
-                    httpResponse.sendRedirect(
-                        httpRequest.getContextPath() + "/pending-approval"
+                // Implement AccessControlService or similar to use checkUserStatusAndPermission
+                boolean isActive = authService.checkUserStatus(
+                    userId,
+                    userType
+                );
+                boolean hasAccess = authService.checkUserPermission(
+                    userId,
+                    userType,
+                    requestURI
+                );
+                if (!isActive) {
+                    // Redirect or show an inactive user message based on your application's requirements
+                    // set path to /inactive
+                    request
+                        .getRequestDispatcher(
+                            "/WEB-INF/views/pending-approval.jsp"
+                        )
+                        .forward(request, response);
+                    return;
+                }
+
+                if (!hasAccess) {
+                    // Redirect or show an unauthorized access message based on your application's requirements
+                    httpResponse.sendError(
+                        HttpServletResponse.SC_FORBIDDEN,
+                        "You do not have permission to access this resource."
                     );
-                    return; // Prevent processing any further in the filter chain
+                    return;
                 }
             }
         }
 
         // Continue with the filter chain for all other requests
         chain.doFilter(request, response);
-    }
-
-    private String extractUserStatus(Object user) {
-        // Placeholder implementation - adjust this to your user object
-        // For example, if your user object is an instance of a class with a getStatus() method, cast and call it here.
-        // return ((YourUserClass) user).getStatus();
-        return "approved"; // Just a placeholder, replace it with actual implementation
     }
 
     @Override

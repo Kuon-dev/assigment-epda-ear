@@ -9,6 +9,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class AuthService {
@@ -63,10 +64,64 @@ public class AuthService {
     }
 
     public boolean checkEmail(String email) {
-        String queryString = "SELECT u FROM User u WHERE u.email = :email";
-        TypedQuery<User> query = em.createQuery(queryString, User.class);
-        query.setParameter("email", email);
-        User user = query.getSingleResult();
-        return user != null;
+        // Assuming Veterinarian, Receptionist, and ManagingStaff are separate entities without a shared superclass
+        if (existsInEntity(email, Veterinarian.class)) return true;
+        if (existsInEntity(email, Receptionist.class)) return true;
+        return existsInEntity(email, ManagingStaff.class);
+    }
+
+    private <T> boolean existsInEntity(String email, Class<T> entityType) {
+        String queryString =
+            "SELECT u FROM " +
+            entityType.getSimpleName() +
+            " u WHERE u.email = :email";
+        List<T> results = em
+            .createQuery(queryString, entityType)
+            .setParameter("email", email)
+            .getResultList();
+        return !results.isEmpty();
+    }
+
+    public <T extends User> boolean checkUserStatus(
+        Long id,
+        Class<T> entityType
+    ) {
+        return (isUserStatusActive(id, entityType));
+    }
+
+    public <T extends User> boolean checkUserPermission(
+        Long id,
+        Class<T> entityType,
+        String path
+    ) {
+        // Determine if the path is allowed for the user's role
+        if (
+            entityType.equals(ManagingStaff.class) &&
+            path.startsWith("/managing-staff/")
+        ) {
+            return true;
+        } else if (
+            entityType.equals(Receptionist.class) &&
+            path.startsWith("/receptionist/")
+        ) {
+            return true;
+        } else if (
+            entityType.equals(Veterinarian.class) &&
+            path.startsWith("/veterinarian/")
+        ) {
+            return true;
+        }
+        // Default to false if none of the conditions match
+        return false;
+    }
+
+    private boolean isUserStatusActive(Long userId, Class<?> userType) {
+        Object user = em.find(userType, userId);
+        if (user != null && user instanceof User) {
+            return "ACTIVE".equalsIgnoreCase(
+                    ((User) user).getStatus().toString()
+                );
+        }
+        return false;
     }
 }
