@@ -177,15 +177,12 @@
                   Sign up
                 </button>
               </div>
-              <c:if test="${not empty errorMsgs}">
-                <div class="text-xs text-red-600">
-                  <ul>
-                    <c:forEach items="${errorMsgs}" var="msg">
-                      <li><c:out value="${msg}" /></li>
-                    </c:forEach>
-                  </ul>
-                </div>
-              </c:if>
+        <c:if test="${not empty sessionScope.operationMessage}">
+          <p class="text-xs text-red-600 mt-2">
+            ${sessionScope.authError}
+          </p>
+          <% session.removeAttribute("error"); %>
+        </c:if>
             </form>
             <%-- End Form --%>
           </div>

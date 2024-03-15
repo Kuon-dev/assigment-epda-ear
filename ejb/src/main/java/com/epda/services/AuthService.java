@@ -61,4 +61,12 @@ public class AuthService {
     private boolean checkPassword(String rawPassword, String storedPassword) {
         return rawPassword.equals(storedPassword);
     }
+
+    public boolean checkEmail(String email) {
+        String queryString = "SELECT u FROM User u WHERE u.email = :email";
+        TypedQuery<User> query = em.createQuery(queryString, User.class);
+        query.setParameter("email", email);
+        User user = query.getSingleResult();
+        return user != null;
+    }
 }
