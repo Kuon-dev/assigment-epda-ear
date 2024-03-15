@@ -95,9 +95,13 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="text-xs text-red-600 mt-2" id="password-error">
-                    <% if (request.getAttribute("authError") != null) { %> <%=
-                    request.getAttribute("authError") %> <% } %>
+        <c:if test="${not empty sessionScope.operationMessage}">
+          <p class="text-xs text-red-600 mt-2" id="password-error">
+            ${sessionScope.authError}
+          </p>
+          <% session.removeAttribute("authError"); %>
+        </c:if>
+
                   </p>
                 </div>
                 <%-- End Form Group --%>

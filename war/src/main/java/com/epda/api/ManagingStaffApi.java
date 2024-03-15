@@ -95,6 +95,69 @@ public class ManagingStaffApi extends HttpServlet {
         }
     }
 
+    @Override
+    protected void doPut(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
+        String pathInfo = request.getPathInfo();
+        if (pathInfo != null && pathInfo.split("/").length == 2) {
+            String[] splits = pathInfo.split("/");
+            try {
+                Long id = Long.parseLong(splits[1]);
+                ManagingStaff existingManagingStaff = managingStaffFacade.find(
+                    id
+                );
+                if (existingManagingStaff != null) {
+                    Jsonb jsonb = JsonbBuilder.create();
+                    ManagingStaff updatedManagingStaff = jsonb.fromJson(
+                        request.getReader(),
+                        ManagingStaff.class
+                    );
+
+                    // Ensure that the ID in the URL matches the ID in the body or is not set in the body
+                    if (
+                        updatedManagingStaff.getId() == null ||
+                        updatedManagingStaff
+                            .getId()
+                            .equals(existingManagingStaff.getId())
+                    ) {
+                        // Copy properties from updatedManagingStaff to existingManagingStaff (excluding ID if necessary)
+                        updateExistingManagingStaff(
+                            existingManagingStaff,
+                            updatedManagingStaff
+                        );
+
+                        managingStaffFacade.edit(existingManagingStaff); // Implement the update logic in the facade
+                        writeResponse(response, existingManagingStaff);
+                    } else {
+                        response.sendError(
+                            HttpServletResponse.SC_BAD_REQUEST,
+                            "ID in URL does not match ID in body"
+                        );
+                    }
+                } else {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                }
+            } catch (NumberFormatException e) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
+        } else {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        }
+    }
+
+    private void updateExistingManagingStaff(
+        ManagingStaff existing,
+        ManagingStaff updated
+    ) {
+        // Copy properties from updated to existing. For example:
+        existing.setName(updated.getName());
+        existing.setPassword(updated.getPassword());
+        existing.setEmail(updated.getEmail());
+        existing.setPhone(updated.getPhone());
+    }
+
     private void writeResponse(HttpServletResponse response, Object object)
         throws IOException {
         Jsonb jsonb = JsonbBuilder.create();

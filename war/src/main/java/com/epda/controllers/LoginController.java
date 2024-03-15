@@ -52,7 +52,10 @@ public class LoginController extends HttpServlet {
             response.sendRedirect(redirectUrl);
         } else {
             // Authentication failed, redirect to login page with error
-            request.setAttribute("authError", "Invalid email or password");
+            // request.setAttribute("authError", "Invalid email or password");
+            request
+                .getSession()
+                .setAttribute("authError", "Invalid email or password");
             response.sendRedirect("login.jsp?error=Invalid email or password"); // Adjust as needed
         }
     }

@@ -1,6 +1,7 @@
 package com.epda.controllers.staff;
 
 import com.epda.facade.AuditFacade;
+import com.epda.model.AuditLog;
 import com.epda.model.ManagingStaff;
 import com.epda.model.Receptionist;
 import com.epda.model.User;
@@ -12,7 +13,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+@WebServlet("/managing-staff/audit-log/view")
 public class ViewAuditLog extends HttpServlet {
 
     @EJB
@@ -27,7 +33,20 @@ public class ViewAuditLog extends HttpServlet {
         User user = (User) session.getAttribute("user");
 
         if (user instanceof ManagingStaff) {
-            request.setAttribute("auditLogs", auditFacade.findAll());
+            List<AuditLog> auditLogs = auditFacade.findAll();
+            // new hashmap for formatted dates
+            Map<Long, String> formattedDates = new HashMap<>();
+            auditLogs.forEach(a -> {
+                formattedDates.put(
+                    a.getId(),
+                    a
+                        .getTimestamp()
+                        .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
+                );
+            });
+
+            request.setAttribute("auditLogs", auditLogs);
+            request.setAttribute("formattedDates", formattedDates);
             request
                 .getRequestDispatcher(
                     "/WEB-INF/views/managing-staff/audit-log.jsp"
