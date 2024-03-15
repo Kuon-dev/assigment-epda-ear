@@ -2,9 +2,11 @@ package com.epda.controllers;
 
 import com.epda.facade.ReceptionistFacade;
 import com.epda.facade.VeterinarianFacade;
+import com.epda.model.ManagingStaff;
 import com.epda.model.Receptionist;
 import com.epda.model.User;
 import com.epda.model.Veterinarian;
+import com.epda.model.enums.AccountStatus;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -36,7 +38,11 @@ public class RegisterController extends HttpServlet {
             ? pathInfo.substring(1).toLowerCase()
             : "";
         // Check for the specific roles and forward to the correct page
-        if ("receptionist".equals(path) || "veterinarian".equals(path)) {
+        if (
+            "receptionist".equals(path) ||
+            "veterinarian".equals(path) ||
+            "managing-staff".equals(path)
+        ) {
             request
                 .getRequestDispatcher("/register.jsp")
                 .forward(request, response);
@@ -64,12 +70,6 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
 
-        // Validate input
-        // if (name == null || name.isBlank()) errorMsgs.add("Name is required.");
-        // if (email == null || email.isBlank()) errorMsgs.add("Email is required.");
-        // if (password == null || password.isBlank()) errorMsgs.add("Password is required.");
-        // if (!password.equals(confirmPassword)) errorMsgs.add("Passwords do not match.");
-
         if (!errorMsgs.isEmpty()) {
             request.setAttribute("errorMsgs", errorMsgs);
             request
@@ -85,6 +85,9 @@ public class RegisterController extends HttpServlet {
             case "veterinarian":
                 registerVeterinarian(name, email, password, phone);
                 break;
+            case "managing-staff":
+                registerManagingStaff(name, email, password, phone);
+                break;
             default:
                 errorMsgs.add("Unknown role");
                 request.setAttribute("errorMsgs", errorMsgs);
@@ -98,7 +101,7 @@ public class RegisterController extends HttpServlet {
             "Successfully registered as " + role
         );
         response.sendRedirect(
-            request.getContextPath() + "/registerSuccess.jsp"
+            request.getContextPath() + "/register-success.jsp"
         ); // Redirect to a success page
     }
 
@@ -123,6 +126,7 @@ public class RegisterController extends HttpServlet {
     ) {
         Receptionist receptionist = new Receptionist();
         populateUserFields(receptionist, name, email, password, phone);
+        receptionist.setStatus(AccountStatus.INACTIVE);
         receptionistFacade.create(receptionist);
     }
 
@@ -138,7 +142,19 @@ public class RegisterController extends HttpServlet {
         veterinarian.setEmail(email);
         veterinarian.setPassword(password);
         veterinarian.setPhone(phone);
+        veterinarian.setStatus(AccountStatus.INACTIVE);
         // Persist the veterinarian
         veterinarianFacade.create(veterinarian);
+    }
+
+    private void registerManagingStaff(
+        String name,
+        String email,
+        String password,
+        String phone
+    ) {
+        ManagingStaff managingStaff = new ManagingStaff();
+        populateUserFields(managingStaff, name, email, password, phone);
+        managingStaff.setStatus(AccountStatus.INACTIVE);
     }
 }

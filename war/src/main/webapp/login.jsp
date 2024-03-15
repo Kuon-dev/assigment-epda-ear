@@ -22,6 +22,17 @@
             </h1>
           </div>
 
+          <div>
+            <p class="mt-2 text-sm text-gray-600 text-center">
+              Don't have an account?
+              <a
+                href="register"
+                class="text-blue-600 hover:underline"
+                >Sign up</a
+              >
+            </p>
+          </div>
+
           <div class="mt-5">
             <%-- Form --%>
             <form action="login" method="POST">
