@@ -1,7 +1,6 @@
 package com.epda.controllers.veterinarian;
 
 import com.epda.facade.AppointmentFacade;
-import com.epda.facade.VeterinarianFacade;
 import com.epda.facade.WorkingRotaFacade;
 import com.epda.model.Appointment;
 import com.epda.model.User;
@@ -14,12 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @WebServlet("/veterinarian/appointments/view/*")
