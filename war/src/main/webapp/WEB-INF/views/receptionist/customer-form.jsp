@@ -16,6 +16,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   </head>
   <body class="bg-gray-50">
+    <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
+<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+  <%-- Card --%>
     <c:if test="${not empty errorMessage}">
         <div id="servletException" style="color: red;">${errorMessage}</div>
     </c:if>
@@ -24,10 +27,15 @@
         <div id="servletSuccess" style="color: green;">${successMessage}</div>
     </c:if>
 
-    <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
-<div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
-  <%-- Card --%>
+
   <div class="rounded-xl shadow p-4 sm:p-7">
+    <%-- back button --%>
+    <div class="mb-8">
+      <a
+        href="${pageContext.request.contextPath}/receptionist/customers/view/1"
+        class="text-blue-600 hover:underline"
+      >
+    </div>
     <div class="mb-8">
       <h2 class="text-xl font-bold text-gray-800">
         New Customer Profile

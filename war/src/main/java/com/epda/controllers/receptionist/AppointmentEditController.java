@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @WebServlet("/receptionist/appointments/edit/*")
@@ -78,11 +79,10 @@ public class AppointmentEditController extends HttpServlet {
             request.setAttribute("pet", pet);
             request.setAttribute("customer", customer);
             // parse appointment date as string in yyyy-MM-dd format
-            request.setAttribute(
-                "appointmentDate",
-                appointment.getAppointmentDate().toString()
-            );
-
+            String formattedDate = appointment
+                .getAppointmentDate()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            request.setAttribute("appointmentDate", formattedDate);
             // Handling veterinarian information
             Veterinarian currentVet = appointment.getVeterinarian();
             List<Veterinarian> vetList = veterinarianFacade.findByExpertise(

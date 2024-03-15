@@ -29,6 +29,20 @@
           })
           .then((data) => {
             console.log(data)
+          Toastify({
+            text: "Profile updated successfully!",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: 'right', // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            onClick: function(){} // Callback after click
+          }).showToast();
+
             // Handle success here (e.g., redirect or display a success message)
           })
           .catch((error) => {
@@ -36,10 +50,24 @@
               'There has been a problem with your fetch operation:',
               error
             )
-          })
-      })
-    }
+      Toastify({
+        text: `An error occurred: ${error.message}`,
+        duration: 3000,
+        newWindow: true,
+        close: true,
+        gravity: "top", // `top` or `bottom`
+        position: 'right', // `left`, `center` or `right`
+        stopOnFocus: true, // Prevents dismissing of toast on hover
+        style: {
+          background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+        },
+        onClick: function(){} // Callback after click
+      }).showToast();
+
+    })
   })
+  }
+})
 </script>
 <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
   <%-- Card --%>
@@ -55,6 +83,7 @@
 
     <form
       action="${pageContext.request.contextPath}/api/${userRole}/${user.id}"
+      method="PUT"
     >
       <%-- Grid --%>
       <div class="grid sm:grid-cols-12 gap-2 sm:gap-6">

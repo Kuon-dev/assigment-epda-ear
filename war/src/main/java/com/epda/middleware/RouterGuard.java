@@ -50,11 +50,31 @@ public class RouterGuard implements Filter {
                     httpRequest.getContextPath() + "/login"
                 );
                 return; // Important to return here to prevent further filter processing
+            } else {
+                // Assuming the user object has a getStatus() method to check the user's status
+                Object user = session.getAttribute("user");
+                // You'll need to adjust this to match how you can retrieve the status from your user object
+                String status = extractUserStatus(user); // Implement this method based on your user object
+
+                // Redirect to a pending page if the status is not approved
+                if (!"approved".equalsIgnoreCase(status)) {
+                    httpResponse.sendRedirect(
+                        httpRequest.getContextPath() + "/pending-approval"
+                    );
+                    return; // Prevent processing any further in the filter chain
+                }
             }
         }
 
         // Continue with the filter chain for all other requests
         chain.doFilter(request, response);
+    }
+
+    private String extractUserStatus(Object user) {
+        // Placeholder implementation - adjust this to your user object
+        // For example, if your user object is an instance of a class with a getStatus() method, cast and call it here.
+        // return ((YourUserClass) user).getStatus();
+        return "approved"; // Just a placeholder, replace it with actual implementation
     }
 
     @Override

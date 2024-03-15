@@ -59,6 +59,16 @@ public class DatabaseSeeder {
                 }
             }
 
+            // loop 10k times to create 10k schedules
+            for (int i = 0; i < 10000; i++) {
+                Schedule schedule = ScheduleFactory.create(
+                    veterinarians.get(
+                        new Random().nextInt(veterinarians.size())
+                    )
+                );
+                em.persist(schedule);
+            }
+
             for (int i = 0; i < numberOfCustomers; i++) {
                 Customer customer = CustomerFactory.create();
                 em.persist(customer);

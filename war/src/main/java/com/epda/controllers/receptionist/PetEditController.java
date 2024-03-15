@@ -2,6 +2,7 @@ package com.epda.controllers.receptionist;
 
 import com.epda.facade.PetFacade;
 import com.epda.model.Pet;
+import com.epda.model.enums.Expertise;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -41,6 +42,7 @@ public class PetEditController extends HttpServlet {
                 return;
             }
             request.setAttribute("pet", pet);
+            request.setAttribute("allExpertise", Expertise.values());
             request
                 .getRequestDispatcher(
                     "/WEB-INF/views/receptionist/pet-form.jsp"

@@ -22,6 +22,17 @@
             </h1>
           </div>
 
+          <div>
+            <p class="mt-2 text-sm text-gray-600 text-center">
+              Don't have an account?
+              <a
+                href="register"
+                class="text-blue-600 hover:underline"
+                >Sign up</a
+              >
+            </p>
+          </div>
+
           <div class="mt-5">
             <%-- Form --%>
             <form action="login" method="POST">
@@ -95,9 +106,13 @@
                       </svg>
                     </div>
                   </div>
-                  <p class="text-xs text-red-600 mt-2" id="password-error">
-                    <% if (request.getAttribute("authError") != null) { %> <%=
-                    request.getAttribute("authError") %> <% } %>
+        <c:if test="${not empty sessionScope.operationMessage}">
+          <p class="text-xs text-red-600 mt-2" id="password-error">
+            ${sessionScope.authError}
+          </p>
+          <% session.removeAttribute("authError"); %>
+        </c:if>
+
                   </p>
                 </div>
                 <%-- End Form Group --%>

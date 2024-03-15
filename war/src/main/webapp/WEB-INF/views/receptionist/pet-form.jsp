@@ -18,6 +18,14 @@
     <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
   <div class="max-w-4xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
     <div class="rounded-xl shadow p-4 sm:p-7">
+      <div class="flex items-center justify-between mb-8">
+        <button 
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onclick="window.history.back();"
+        >
+          <span>Back</span>
+        </button>
+      </div>
       <div class="mb-8">
         <h2 class="text-xl font-bold text-gray-800">Edit Pet Profile</h2>
         <c:if test="${not empty errorMessage}">
@@ -46,7 +54,17 @@
             </label>
           </div>
           <div class="sm:col-span-9">
-            <input id="petType" name="type" type="text" class="py-2 px-3 block w-full border-gray-200 shadow-sm text-sm rounded-lg focus:border-blue-500 focus:ring-blue-500" placeholder="Type of the pet" required value="${pet.type}" />
+
+<div class="mb-4 sm:mb-8">
+  <label for="type" class="block mb-2 text-sm font-medium dark:text-white">Type</label>
+  <div class="relative h-10 w-72 min-w-[200px]">
+<select id="petType" name="petType" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+    <c:forEach items="${allExpertise}" var="expertise">
+        <option value="${expertise}" ${pet.type == expertise ? 'selected' : ''}>${expertise.name().replace('_', ' ')}</option>
+    </c:forEach>
+</select>
+  </div>
+</div>
           </div>
 
           <div class="sm:col-span-3">

@@ -24,6 +24,7 @@ public abstract class AbstractFacade<T> {
     public void create(T entity) {
         getEntityManager().persist(entity);
         logOperation("CREATE", entity);
+        // refetch the entity when adding to the database to get the generated ID
     }
 
     public void edit(T entity) {
@@ -88,6 +89,7 @@ public abstract class AbstractFacade<T> {
     }
 
     private void logOperation(String operation, T entity) {
+        getEntityManager().flush();
         Long entityId = getId(entity);
         AuditLog log = new AuditLog(
             entityClass.getSimpleName(),

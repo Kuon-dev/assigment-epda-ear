@@ -4,6 +4,7 @@ import com.epda.facade.CustomerFacade;
 import com.epda.facade.PetFacade;
 import com.epda.model.Customer;
 import com.epda.model.Pet;
+import com.epda.model.enums.Expertise;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/receptionist/pets/new/*")
@@ -31,6 +33,7 @@ public class PetNewController extends HttpServlet {
         String customerIdString = pathParts[pathParts.length - 1];
 
         request.setAttribute("customerId", customerIdString);
+        request.setAttribute("allExpertise", Arrays.asList(Expertise.values()));
         request
             .getRequestDispatcher("/WEB-INF/views/receptionist/pet-new.jsp")
             .forward(request, response);
@@ -60,7 +63,7 @@ public class PetNewController extends HttpServlet {
         String name = request.getParameter("name");
         String breed = request.getParameter("breed");
         String ageString = request.getParameter("age");
-        String type = request.getParameter("type");
+        String expertiseStr = request.getParameter("expertise");
 
         try {
             int age = Integer.parseInt(ageString);
@@ -68,7 +71,7 @@ public class PetNewController extends HttpServlet {
             newPet.setCustomer(customer);
             newPet.setName(name);
             newPet.setAge(age);
-            newPet.setType(type);
+            newPet.setType(expertiseStr);
             newPet.setBreed(breed);
 
             petFacade.create(newPet);

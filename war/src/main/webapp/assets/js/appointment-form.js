@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const options = {
+  type: 'default',
   settings: {
-    selection: {
-      day: 'multiple',
-    },
     selected: {
       dates: [document.getElementById('appointmentDate').value.split('T')[0]],
     },
@@ -12,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
       clickDay(event, self) {
         if (self.selectedDates.length > 0) {
           const selectedDateStr = self.selectedDates[self.selectedDates.length - 1]; // Get the first selected date as a string
-          self.selectedDates.shift();
+          // self.selectedDates.shift();
           document.getElementById('appointmentDate').value = selectedDateStr;
         }
       },

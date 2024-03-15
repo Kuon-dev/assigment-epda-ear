@@ -20,12 +20,19 @@
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
       <div class="container mx-auto mt-5">
         <h2 class="text-xl font-semibold mb-4">Schedule Appointment</h2>
+        <button 
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onclick="window.history.back();"
+        >
+          <span>Back</span>
+        </button>
+
         <form id="appointmentForm">
           <input type="hidden" name="petId" value="${pet.getId()}" />
           <input type="hidden" name="customerId" value="${customer.getId()}" />
           <input type="hidden" name="appointmentDate" id="appointmentDate" value="${appointmentDate}" />
-          <!-- Time Slot -->
-          <div class="mb-4">
+          <!-- Appointment Status Dropdown -->
+<div class="mb-4">
             <label for="timeSlot" class="block text-sm font-medium mb-1">Time Slot:</label>
             <select id="timeSlot" name="timeSlot" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
               <c:forEach var="timeSlot" items="${timeSlots}">
@@ -33,12 +40,11 @@
               </c:forEach>
             </select>
           </div>
-          <!-- Appointment Status Dropdown -->
-          <div class="mb-4">
+          <div class="mb-4 hidden">
             <label for="status" class="block text-sm font-medium mb-1">Status:</label>
             <select id="status" name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
               <c:forEach var="status" items="${appointmentStatuses}">
-                <option value="${status}" ${status == appointment.status ? 'selected' : ''}>${status}</option>
+                <option value="${status}" ${status == 'SCHEDULED'? 'selected' : ''}>${status}</option>
               </c:forEach>
             </select>
           </div>
@@ -89,6 +95,6 @@
         </form>
       </div>
     </div>
-    <script src="${pageContext.request.contextPath}/assets/js/appointment-form.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/js/appointment-new.js"></script>
   </body>
 </html>

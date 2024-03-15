@@ -3,6 +3,7 @@ package com.epda.services;
 import com.epda.model.ManagingStaff;
 import com.epda.model.Receptionist;
 import com.epda.model.User;
+import com.epda.model.Veterinarian;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
@@ -26,7 +27,8 @@ public class AuthService {
         user = authenticate(email, password, Receptionist.class);
         if (user != null) return user;
 
-        // Extend with other roles as necessary
+        user = authenticate(email, password, Veterinarian.class);
+        if (user != null) return user;
 
         return null; // Authentication failed
     }
@@ -58,5 +60,13 @@ public class AuthService {
 
     private boolean checkPassword(String rawPassword, String storedPassword) {
         return rawPassword.equals(storedPassword);
+    }
+
+    public boolean checkEmail(String email) {
+        String queryString = "SELECT u FROM User u WHERE u.email = :email";
+        TypedQuery<User> query = em.createQuery(queryString, User.class);
+        query.setParameter("email", email);
+        User user = query.getSingleResult();
+        return user != null;
     }
 }

@@ -1,10 +1,14 @@
 package com.epda.controllers;
 
+import com.epda.facade.ManagingStaffFacade;
 import com.epda.facade.ReceptionistFacade;
 import com.epda.facade.VeterinarianFacade;
+import com.epda.model.ManagingStaff;
 import com.epda.model.Receptionist;
 import com.epda.model.User;
 import com.epda.model.Veterinarian;
+import com.epda.model.enums.AccountStatus;
+import com.epda.services.AuthService;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,6 +30,12 @@ public class RegisterController extends HttpServlet {
     @EJB
     private ReceptionistFacade receptionistFacade;
 
+    @EJB
+    private ManagingStaffFacade managingStaffFacade;
+
+    @EJB
+    private AuthService authService;
+
     @Override
     protected void doGet(
         HttpServletRequest request,
@@ -36,7 +46,11 @@ public class RegisterController extends HttpServlet {
             ? pathInfo.substring(1).toLowerCase()
             : "";
         // Check for the specific roles and forward to the correct page
-        if ("receptionist".equals(path) || "veterinarian".equals(path)) {
+        if (
+            "receptionist".equals(path) ||
+            "veterinarian".equals(path) ||
+            "managing-staff".equals(path)
+        ) {
             request
                 .getRequestDispatcher("/register.jsp")
                 .forward(request, response);
@@ -56,7 +70,6 @@ public class RegisterController extends HttpServlet {
         String role = pathInfo != null && pathInfo.length() > 1
             ? pathInfo.substring(1).toLowerCase()
             : "";
-        List<String> errorMsgs = new ArrayList<>();
 
         String name = request.getParameter("name");
         String email = request.getParameter("email");
@@ -64,32 +77,57 @@ public class RegisterController extends HttpServlet {
         String password = request.getParameter("password");
         String confirmPassword = request.getParameter("confirm-password");
 
-        // Validate input
-        // if (name == null || name.isBlank()) errorMsgs.add("Name is required.");
-        // if (email == null || email.isBlank()) errorMsgs.add("Email is required.");
-        // if (password == null || password.isBlank()) errorMsgs.add("Password is required.");
-        // if (!password.equals(confirmPassword)) errorMsgs.add("Passwords do not match.");
-
-        if (!errorMsgs.isEmpty()) {
-            request.setAttribute("errorMsgs", errorMsgs);
+        if (!password.equals(confirmPassword)) {
             request
-                .getRequestDispatcher("/registrationErrors.jsp")
-                .forward(request, response);
+                .getSession()
+                .setAttribute("authError", "Passwords do not match");
+            doGet(request, response);
             return;
         }
 
-        switch (role) {
-            case "receptionist":
-                registerReceptionist(name, email, password, phone);
-                break;
-            case "veterinarian":
-                registerVeterinarian(name, email, password, phone);
-                break;
-            default:
-                errorMsgs.add("Unknown role");
-                request.setAttribute("errorMsgs", errorMsgs);
-                doGet(request, response);
-                return;
+        if (
+            name == null || email == null || phone == null || password == null
+        ) {
+            request
+                .getSession()
+                .setAttribute("authError", "All fields are required");
+            doGet(request, response);
+            return;
+        }
+
+        // if email exists
+        if (authService.checkEmail(email)) {
+            request
+                .getSession()
+                .setAttribute("authError", "Email already exists");
+            doGet(request, response);
+            return;
+        }
+
+        try {
+            switch (role) {
+                case "receptionist":
+                    registerReceptionist(name, email, password, phone);
+                    break;
+                case "veterinarian":
+                    registerVeterinarian(name, email, password, phone);
+                    break;
+                case "managing-staff":
+                    registerManagingStaff(name, email, password, phone);
+                    break;
+                default:
+                    request
+                        .getSession()
+                        .setAttribute("authError", "Unknown Role");
+                    doGet(request, response);
+                    return;
+            }
+        } catch (Exception e) {
+            request
+                .getSession()
+                .setAttribute("authError", "Error registering user");
+            doGet(request, response);
+            return;
         }
 
         HttpSession session = request.getSession();
@@ -97,9 +135,9 @@ public class RegisterController extends HttpServlet {
             "registrationSuccess",
             "Successfully registered as " + role
         );
-        response.sendRedirect(
-            request.getContextPath() + "/registerSuccess.jsp"
-        ); // Redirect to a success page
+        request
+            .getRequestDispatcher("/register-success.jsp")
+            .forward(request, response);
     }
 
     private void populateUserFields(
@@ -123,6 +161,7 @@ public class RegisterController extends HttpServlet {
     ) {
         Receptionist receptionist = new Receptionist();
         populateUserFields(receptionist, name, email, password, phone);
+        receptionist.setStatus(AccountStatus.INACTIVE);
         receptionistFacade.create(receptionist);
     }
 
@@ -138,7 +177,20 @@ public class RegisterController extends HttpServlet {
         veterinarian.setEmail(email);
         veterinarian.setPassword(password);
         veterinarian.setPhone(phone);
+        veterinarian.setStatus(AccountStatus.INACTIVE);
         // Persist the veterinarian
         veterinarianFacade.create(veterinarian);
+    }
+
+    private void registerManagingStaff(
+        String name,
+        String email,
+        String password,
+        String phone
+    ) {
+        ManagingStaff managingStaff = new ManagingStaff();
+        populateUserFields(managingStaff, name, email, password, phone);
+        managingStaff.setStatus(AccountStatus.INACTIVE);
+        managingStaffFacade.create(managingStaff);
     }
 }

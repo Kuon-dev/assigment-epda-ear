@@ -31,14 +31,6 @@
           Search
           </button>
         </form>
-        <div>
-          <a
-            href="${pageContext.request.contextPath}/receptionist/appointments/add"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-          Add Appointment
-          </a>
-        </div>
       </div>
       <div class="container mx-auto mt-10">
         <h1 class="text-xl font-bold mb-5">Appointments</h1>

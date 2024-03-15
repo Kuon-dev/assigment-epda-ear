@@ -16,8 +16,11 @@ public class ScheduleFactory {
 
     public static Schedule create(Veterinarian veterinarian) {
         Schedule schedule = new Schedule();
+        // randomly assign if a veterinarain or not
         schedule.setVeterinarian(veterinarian);
-        // schedule.setDate(faker.date().future(365, LocalDate.now().toEpochDay()).toLocalDate());
+        // if (random.nextBoolean()) {
+        //     schedule.setVeterinarian(veterinarian);
+        // }
         schedule.setDate(
             faker
                 .date()
@@ -26,6 +29,7 @@ public class ScheduleFactory {
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate()
         );
+        // either morning or afternoon
         schedule.setShift(
             TimeSlot.values()[random.nextInt(TimeSlot.values().length)]
         );

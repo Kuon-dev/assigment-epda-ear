@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Make Appointment</title>
+    <title>APU Veterinary Clinic System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar-pro/build/vanilla-calendar.min.js" defer></script>
@@ -16,7 +16,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
   </head>
   <body class="bg-gray-50">
-    <div color="hidden" id="servletException"><%=exception.getMessage() %></div>
+    <div color="" id="servletException"></div>
     <jsp:include page="/WEB-INF/components/receptionist/sidebar.jsp" />
     <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
       <div class="container mx-auto mt-5">
