@@ -136,7 +136,7 @@ public class RegisterController extends HttpServlet {
             "Successfully registered as " + role
         );
         request
-            .getRequestDispatcher("/register-success.jsp")
+            .getRequestDispatcher("/WEB-INF/views/register-success.jsp")
             .forward(request, response);
     }
 
