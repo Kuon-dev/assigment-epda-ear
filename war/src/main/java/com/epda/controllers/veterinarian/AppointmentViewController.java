@@ -2,8 +2,10 @@ package com.epda.controllers.veterinarian;
 
 import com.epda.facade.AppointmentFacade;
 import com.epda.facade.VeterinarianFacade;
+import com.epda.facade.WorkingRotaFacade;
 import com.epda.model.Appointment;
 import com.epda.model.User;
+import com.epda.model.WorkingRota;
 import jakarta.ejb.EJB;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -26,13 +28,16 @@ public class AppointmentViewController extends HttpServlet {
     @EJB
     private AppointmentFacade appointmentFacade;
 
+    @EJB
+    private WorkingRotaFacade workingRotaFacade;
+
     @Override
     protected void doGet(
         HttpServletRequest request,
         HttpServletResponse response
     ) throws ServletException, IOException {
         String pathInfo = request.getPathInfo();
-        int currentPage = 1;
+        Long rotaId = null;
 
         HttpSession session = request.getSession(false);
         User user = (User) session.getAttribute("user");
@@ -48,98 +53,43 @@ public class AppointmentViewController extends HttpServlet {
             String[] splits = pathInfo.split("/");
             if (splits.length > 1) {
                 try {
-                    currentPage = Integer.parseInt(splits[1]);
+                    rotaId = Long.parseLong(splits[1]);
                 } catch (NumberFormatException e) {
-                    // Handle incorrect format gracefully, perhaps redirect to a default page or log
-                    currentPage = 1;
+                    response.sendRedirect("/veterinarian/weekly-rota");
                 }
             }
         }
-        String searchQuery = request.getParameter("search");
-        String encodedSearchQuery = "";
+        WorkingRota selectedRota = workingRotaFacade.find(rotaId);
 
-        int totalAppointments;
-        List<Appointment> appointments;
-        if (searchQuery != null && !searchQuery.isEmpty()) {
-            // Perform search operation and get appointments based on the search query
-            encodedSearchQuery = URLEncoder.encode(
-                searchQuery,
-                StandardCharsets.UTF_8.toString()
-            );
-            appointments = appointmentFacade.searchAppointments(searchQuery);
-            // filter the appointments based on vet's id
-            appointments = appointments
-                .stream()
-                .filter(
-                    appointment ->
-                        appointment.getVeterinarian().getId() == vetId
-                )
-                .collect(Collectors.toList());
-            totalAppointments = appointments.size();
-        } else {
-            // No search query provided, fetch all appointments or appointments for the current page
-            // appointments = appointmentFacade.findAll(); // Or use pagination logic if implemented
-            appointments = appointmentFacade.findAppointments(
-                "updatedAt",
-                "DESC"
-            );
-            appointments = appointments
-                .stream()
-                .filter(
-                    appointment ->
-                        appointment.getVeterinarian().getId() == vetId
-                )
-                .collect(Collectors.toList());
-
-            totalAppointments = appointmentFacade.count();
-        }
-        int maxPagesToShow = 5;
-
-        int totalPages = (int) Math.ceil((double) totalAppointments / 10);
-        int halfPagesToShow = maxPagesToShow / 2;
-        int startPage = Math.max(currentPage - halfPagesToShow, 1);
-
-        int endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
-        if (endPage - startPage < maxPagesToShow - 1) {
-            startPage = Math.max(endPage - (maxPagesToShow - 1), 1);
-        }
-
-        // if there is a search query, don't paginate
-        appointments = searchQuery != null && !searchQuery.isEmpty()
-            ? appointments
-            : appointments.subList(
-                (currentPage - 1) * 10,
-                Math.min(currentPage * 10, appointments.size())
+        List<Appointment> appointmentList =
+            appointmentFacade.findAppointmentsForVeterinarianAndDateRange(
+                vetId,
+                selectedRota.getStartDate(),
+                selectedRota.getEndDate()
             );
 
-        Map<Long, String> formattedDates = new HashMap<>();
-        appointments.forEach(appointment -> {
-            formattedDates.put(
-                appointment.getId(),
-                appointment
-                    .getAppointmentDate()
-                    .format(DateTimeFormatter.ofPattern("MM/dd/yyyy"))
-            );
-        });
-        request.setAttribute("formattedDates", formattedDates);
-        request.setAttribute("encodedSearchQuery", encodedSearchQuery);
+        // get day of time from query param
+        String dayOfWeek = request.getParameter("dayOfWeek").toLowerCase();
+        // filter appointments by day, for example monday
+        List<Appointment> appointmentsByDay = appointmentList
+            .stream()
+            .filter(
+                appointment ->
+                    appointment
+                        .getAppointmentDate()
+                        .getDayOfWeek()
+                        .toString()
+                        .toLowerCase()
+                        .equals(dayOfWeek)
+            )
+            .collect(Collectors.toList());
 
-        request.setAttribute("startPage", startPage);
-        request.setAttribute("endPage", endPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("appointments", appointments);
+        request.setAttribute("appointments", appointmentsByDay);
+        request.setAttribute("dayOfWeek", dayOfWeek);
         request
             .getRequestDispatcher(
                 "/WEB-INF/views/veterinarian/appointment-table.jsp"
             )
             .forward(request, response);
-    }
-
-    private Long verifyVeterinarian(HttpServletRequest request) {
-        // Verify that the user is a veterinarian
-        // If the user is not a veterinarian, redirect to the login page
-        // If the user is a veterinarian, return the veterinarian's id
-        return 1L;
     }
 }

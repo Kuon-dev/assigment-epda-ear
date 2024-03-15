@@ -38,6 +38,10 @@
                       <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
                         <p class="block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70">Shift</p>
                       </th>
+                      <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                        <p block font-sans text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70>
+                        Action</p>
+                      </th>
                     </tr>
                   </thead>
                   <tbody class="overflow-y-auto">
@@ -48,6 +52,9 @@
                         </td>
                         <td class="p-4 border-b border-blue-gray-50">${dayOfWeek[schedule.id]}</td>
                         <td class="p-4 border-b border-blue-gray-50">${schedule.shift}</td>
+                        <td class="p-4 border-b border-blue-gray-50">
+                          <a href="${pageContext.request.contextPath}/veterinarian/appointments/view/${selectedRota.id}?dayOfWeek=${dayOfWeek[schedule.id]}" class="text-blue-500">View Schedule</a>
+                        </td>
                       </tr>
                     </c:forEach>
                   </tbody>

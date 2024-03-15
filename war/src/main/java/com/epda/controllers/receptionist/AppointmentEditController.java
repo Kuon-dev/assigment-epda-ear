@@ -18,6 +18,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet("/receptionist/appointments/edit/*")
@@ -96,7 +98,12 @@ public class AppointmentEditController extends HttpServlet {
             }
 
             // Setting additional attributes
-            request.setAttribute("timeSlots", TimeSlot.values());
+            List<TimeSlot> timeSlots = new ArrayList<>(
+                Arrays.asList(TimeSlot.values())
+            );
+            timeSlots.remove(TimeSlot.ALL_DAY);
+            request.setAttribute("timeSlots", timeSlots);
+
             request.setAttribute(
                 "appointmentStatuses",
                 AppointmentStatus.values()

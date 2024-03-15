@@ -130,6 +130,18 @@ function submitForm() {
 
     // Handle the error
   });
+
+  fetch('http://localhost:8080/api/schedule/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      vet_id: formData.veterinarianId,
+      date: formData.appointmentDate,
+      shift: formData.timeSlot,
+    }),
+  })
 }
 
 function getAppointmentIdFromUrl() {
