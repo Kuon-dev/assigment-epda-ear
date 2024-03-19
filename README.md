@@ -1,6 +1,6 @@
 # Assignment EPDA EAR
 
-This is a Jakarta EE project built with Gradle.
+This is a Jakarta EE project built with Gradle. This is not meant for production type deployment as it is a legacy system with flaws, use it as a learning material instead.
 
 ## Prerequisite
 
